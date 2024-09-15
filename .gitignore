@@ -1,0 +1,14 @@
+design
+**/uploads
+**/.project
+**/.dbeaver
+
+**/.settings
+**/.classpath
+
+**/.mvn
+**/mvnw*
+**/target
+**/bin
+
+**/.DS_Store
