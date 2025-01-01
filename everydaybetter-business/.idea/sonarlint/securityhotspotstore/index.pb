@@ -17,3 +17,7 @@ Qsrc/main/java/co/simplon/everydaybetterbusiness/repositories/HabitRepository.ja
 Ksrc/main/java/co/simplon/everydaybetterbusiness/dtos/input/HabitCreate.java,e\e\ee548f2b3dd81bd27f03e30306ca3c3de621058f
 x
 Hsrc/main/java/co/simplon/everydaybetterbusiness/mappers/HabitMapper.java,1\7\1773887671a921696522ddb04eecba7ec3211632
+r
+Bsrc/main/java/co/simplon/everydaybetterbusiness/config/Config.java,5\2\528127c383f6e579a767a6d25364a44f5bfef171
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
