@@ -11,4 +11,5 @@ design
 **/target/
 **/bin
 
+**/.idea
 **/.DS_Store
