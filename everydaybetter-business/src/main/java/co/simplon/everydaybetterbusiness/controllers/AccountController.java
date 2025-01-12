@@ -18,7 +18,7 @@ public class AccountController {
         this.service = service;
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     void create(@RequestBody AccountCreate inputs){
         service.create(inputs);
