@@ -8,6 +8,7 @@ import co.simplon.everydaybetterbusiness.repositories.AccountRepository;
 import co.simplon.everydaybetterbusiness.repositories.HabitRepository;
 import co.simplon.everydaybetterbusiness.repositories.LabelRepository;
 import co.simplon.everydaybetterbusiness.services.HabitService;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -44,7 +45,8 @@ public class HabitServiceAdapter implements HabitService {
         entity.setLabelEntity(labelEntity);
         //todo: need to replace by username in token + handle case not found
         String username = "thao";
-        AccountEntity account = accountRepository.findByUsernameIgnoreCase(username);
+        AccountEntity account = accountRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new BadCredentialsException(username));
         entity.setAccountEntity(account);
         habitRepository.save(entity);
 

@@ -1,7 +1,10 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
+import co.simplon.everydaybetterbusiness.dtos.input.AccountAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.input.AccountCreate;
+import co.simplon.everydaybetterbusiness.dtos.output.AuthInfo;
 import co.simplon.everydaybetterbusiness.services.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +25,12 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     void create(@RequestBody AccountCreate inputs){
         service.create(inputs);
+    }
 
+    @PostMapping("/authenticate")
+    @ResponseStatus(HttpStatus.CREATED)
+    AuthInfo authentificate(@Valid @RequestBody AccountAuthenticate inputs) {
+        return service.authenticate(inputs);
     }
 }
 
