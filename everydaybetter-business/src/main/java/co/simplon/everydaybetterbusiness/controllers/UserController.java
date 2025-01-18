@@ -1,9 +1,9 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
-import co.simplon.everydaybetterbusiness.dtos.input.AccountAuthenticate;
-import co.simplon.everydaybetterbusiness.dtos.input.AccountCreate;
+import co.simplon.everydaybetterbusiness.dtos.input.UserAuthenticate;
+import co.simplon.everydaybetterbusiness.dtos.input.UserCreate;
 import co.simplon.everydaybetterbusiness.dtos.output.AuthInfo;
-import co.simplon.everydaybetterbusiness.services.AccountService;
+import co.simplon.everydaybetterbusiness.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/accounts")
-public class AccountController {
-    private final AccountService service;
+@RequestMapping("/users")
+public class UserController {
+    private final UserService service;
 
-    public AccountController(AccountService service) {
+    public UserController(UserService service) {
         this.service = service;
     }
 
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
-    void create(@RequestBody AccountCreate inputs){
+    void create(@Valid @RequestBody UserCreate inputs){
         service.create(inputs);
     }
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.CREATED)
-    AuthInfo authentificate(@Valid @RequestBody AccountAuthenticate inputs) {
+    AuthInfo authentificate(@Valid @RequestBody UserAuthenticate inputs) {
         return service.authenticate(inputs);
     }
 }

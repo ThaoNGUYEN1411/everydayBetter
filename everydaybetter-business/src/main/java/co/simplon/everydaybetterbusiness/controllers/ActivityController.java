@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
-import co.simplon.everydaybetterbusiness.services.HabitService;
+import co.simplon.everydaybetterbusiness.services.ActivityService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.simplon.everydaybetterbusiness.dtos.input.HabitCreate;
+import co.simplon.everydaybetterbusiness.dtos.input.ActivityCreate;
 
 @RestController
-@RequestMapping("/habits")
-public class HabitController {
-    private final HabitService habitService;
+@RequestMapping("/activities")
+public class ActivityController {
+    private final ActivityService activityService;
 
-    public HabitController(HabitService habitService) {
-        this.habitService = habitService;
+    public ActivityController(ActivityService activityService) {
+        this.activityService = activityService;
     }
 
     @PostMapping(value = {"","/"})
     @ResponseStatus(HttpStatus.CREATED)
-    void createHabit(@Valid @RequestBody final HabitCreate inputs) {
-	    habitService.create(inputs);
+    void createActivity(@Valid @RequestBody final ActivityCreate inputs) {
+	    activityService.create(inputs);
     }
 }
 

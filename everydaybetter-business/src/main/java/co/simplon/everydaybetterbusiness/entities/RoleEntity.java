@@ -2,46 +2,56 @@ package co.simplon.everydaybetterbusiness.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "t_roles")
-public class RoleEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoleEntity extends AbstractEntity {
 
     @Column(name = "role_name")
-    private String roleName;
+    private String name;
 
-    @Column(name = "role_default")
+    @Column(name = "is_default")
     private Boolean roleDefault;
 
     public RoleEntity() {
+        //ORM
     }
 
-    public RoleEntity(Boolean roleDefault, String roleName) {
-        this.roleDefault = roleDefault;
-        this.roleName = roleName;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public String getName() {
+        return name;
     }
 
     public Boolean getRoleDefault() {
         return roleDefault;
     }
 
-    public void setIsDefault(Boolean roleDefault) {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRoleDefault(Boolean roleDefault) {
         this.roleDefault = roleDefault;
+    }
+
+    @Override
+    public String toString() {
+        return "RoleEntity{" +
+                "name='" + name + '\'' +
+                ", roleDefault=" + roleDefault +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        return o instanceof RoleEntity other && name.equals(other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

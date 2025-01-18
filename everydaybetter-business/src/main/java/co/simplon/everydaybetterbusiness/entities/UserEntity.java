@@ -2,28 +2,21 @@ package co.simplon.everydaybetterbusiness.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name= "t_accounts")
-public class AccountEntity {
+@Table(name= "t_users")
+public class UserEntity extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "username")
-    private String username;
+    @Column(name = "nickname")
+    private String nickname;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -33,26 +26,22 @@ public class AccountEntity {
 
 //     fetch = FetchType.LAZY: default
     @ManyToMany
-    @JoinTable(name = "t_account_roles", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "t_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
 
-    public AccountEntity() {
+    public UserEntity() {
         //default for ORM
     }
 
-    public AccountEntity(String username, String email, String password, Set<RoleEntity> roles) {
-        this.username = username;
+    public UserEntity(String nickname, String email, String password, Set<RoleEntity> roles) {
+        this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.roles = new HashSet<>(roles);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
     public String getEmail() {
@@ -63,13 +52,12 @@ public class AccountEntity {
         return password;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Long id) {
-        this.id = id;
+    public Set<RoleEntity> getRoles() {
+        return roles;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void setEmail(String email) {
@@ -80,19 +68,26 @@ public class AccountEntity {
         this.password = password;
     }
 
-    public Set<RoleEntity> getRoles() {
-        return Collections.unmodifiableSet(roles);
-    }
 
     @Override
     public String toString() {
-        return "AccountEntity{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
+        return "AccountEntity{"+
+                ", nickname='" + nickname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='PROTECTED" + '\'' +
                 ", roles=LAZY8LOADING" +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        return o instanceof UserEntity other && email.equals(other.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), email);
     }
 }
 // note: private SetId handle by db

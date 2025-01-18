@@ -78,10 +78,10 @@ public class Config {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req-> req
-                        .requestMatchers(HttpMethod.POST, "/accounts/create", "/accounts/authenticate").anonymous())
+                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
 
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers(HttpMethod.GET, "/accounts/with-role").hasRole("ADMIN"))
+                        req -> req.requestMatchers(HttpMethod.GET, "/users/with-role").hasRole("ADMIN"))
 
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
