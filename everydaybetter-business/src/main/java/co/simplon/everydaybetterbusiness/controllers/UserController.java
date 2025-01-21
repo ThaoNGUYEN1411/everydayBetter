@@ -4,6 +4,7 @@ import co.simplon.everydaybetterbusiness.dtos.input.UserAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.input.UserCreate;
 import co.simplon.everydaybetterbusiness.dtos.output.AuthInfo;
 import co.simplon.everydaybetterbusiness.services.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +30,8 @@ public class UserController {
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.CREATED)
-    AuthInfo authentificate(@Valid @RequestBody UserAuthenticate inputs) {
-        return service.authenticate(inputs);
+    AuthInfo authenticate(@Valid @RequestBody UserAuthenticate inputs, HttpServletResponse response) {
+        return service.authenticate(inputs, response);
     }
 }
 

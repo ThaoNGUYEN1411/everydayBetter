@@ -9,6 +9,8 @@ import co.simplon.everydaybetterbusiness.entities.UserEntity;
 import co.simplon.everydaybetterbusiness.repositories.RoleRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
 import co.simplon.everydaybetterbusiness.services.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,7 +47,7 @@ public class UserServiceAdapter implements UserService {
     }
 
     @Override
-    public AuthInfo authenticate(UserAuthenticate inputs){
+    public AuthInfo authenticate(UserAuthenticate inputs, HttpServletResponse response){
         String email = inputs.email();
         UserEntity user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
@@ -59,6 +61,15 @@ public class UserServiceAdapter implements UserService {
         }
 
         String token = jwtProvider.create(email, roles);
+
+        // Set the HTTP-only cookie
+        Cookie cookie = new Cookie("jwt", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // Use secure cookies (only over HTTPS)
+        cookie.setPath("/");
+        cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+        response.addCookie(cookie);
+
         return new AuthInfo(token, roles);
     }
 }
