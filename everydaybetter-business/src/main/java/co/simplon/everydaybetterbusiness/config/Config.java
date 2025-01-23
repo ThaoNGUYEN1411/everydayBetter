@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 @EnableWebSecurity
 public class Config {
-    @Value("${co.simplon.everydaybetterbusiness.cors}")
+    @Value("${co.simplon.everydaybetterbusiness.origins}")
     private String origins;
 
     @Value("${co.simplon.everydaybetterbusiness.cost}")
@@ -48,7 +48,7 @@ public class Config {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("POST").allowedOrigins(origins);
+                registry.addMapping("/**").allowedMethods("POST", "GET").allowedOrigins(origins).allowCredentials(true);
             }
         };
     }
@@ -87,6 +87,5 @@ public class Config {
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
                 .oauth2ResourceServer(srv-> srv.jwt(Customizer.withDefaults()))
                 .build();
-
     }
 }

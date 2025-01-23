@@ -1,6 +1,7 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
 import co.simplon.everydaybetterbusiness.dtos.input.ActivityCreate;
+import co.simplon.everydaybetterbusiness.dtos.output.ActivityDto;
 import co.simplon.everydaybetterbusiness.entities.ActivityEntity;
 import co.simplon.everydaybetterbusiness.entities.CategoryEntity;
 import co.simplon.everydaybetterbusiness.entities.UserEntity;
@@ -11,6 +12,7 @@ import co.simplon.everydaybetterbusiness.services.ActivityService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -45,6 +47,11 @@ public class ActivityServiceAdapter implements ActivityService {
 
         entity.setUserEntity(user);
         activityRepository.save(entity);
+    }
+
+    @Override
+    public List<ActivityDto> getAllActivities(){
+        return activityRepository.findAll().stream().map(act -> new ActivityDto(act.getName(), act.getPositive())).toList();
     }
 }
 
