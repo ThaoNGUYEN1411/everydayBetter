@@ -5,6 +5,8 @@ import co.simplon.everydaybetterbusiness.dtos.output.ActivityDto;
 import co.simplon.everydaybetterbusiness.entities.ActivityEntity;
 import co.simplon.everydaybetterbusiness.entities.CategoryEntity;
 import co.simplon.everydaybetterbusiness.entities.UserEntity;
+import co.simplon.everydaybetterbusiness.exceptions.NotFoundException;
+import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;
 import co.simplon.everydaybetterbusiness.repositories.CategoryRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
@@ -51,7 +53,14 @@ public class ActivityServiceAdapter implements ActivityService {
 
     @Override
     public List<ActivityDto> getAllActivities(){
-        return activityRepository.findAll().stream().map(act -> new ActivityDto(act.getName(), act.getPositive())).toList();
+        return activityRepository.findAll().stream().map(act -> new ActivityDto(act.getId(), act.getName(), act.getPositive())).toList();
+    }
+
+    @Override
+    public ActivityModel findById(final Long id){
+        ActivityEntity entity = activityRepository.findById(id).orElseThrow(() -> new NotFoundException("Activity with ID " + id + " not found"));
+        return new ActivityModel(entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(),
+                entity.getCategories().stream().map(c -> new ActivityModel.Category(c.getId(), c.getName())).toList());
     }
 }
 

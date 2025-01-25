@@ -1,4 +1,4 @@
 package co.simplon.everydaybetterbusiness.dtos.output;
 
-public record ActivityDto(String name, Boolean positive) {
+public record ActivityDto(Long id, String name, Boolean positive) {
 }
