@@ -1,6 +1,8 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
+import co.simplon.everydaybetterbusiness.common.Utils;
 import co.simplon.everydaybetterbusiness.dtos.input.ActivityCreate;
+import co.simplon.everydaybetterbusiness.dtos.input.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.dtos.output.ActivityDto;
 import co.simplon.everydaybetterbusiness.entities.ActivityEntity;
 import co.simplon.everydaybetterbusiness.entities.CategoryEntity;
@@ -11,9 +13,11 @@ import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;
 import co.simplon.everydaybetterbusiness.repositories.CategoryRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
+import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,11 +26,13 @@ public class ActivityServiceAdapter implements ActivityService {
     private final ActivityRepository activityRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final Utils utils;
 
-    public ActivityServiceAdapter(ActivityRepository activityRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public ActivityServiceAdapter(ActivityRepository activityRepository, CategoryRepository categoryRepository, UserRepository userRepository, Utils utils) {
         this.activityRepository = activityRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.utils = utils;
     }
 
     @Override
@@ -37,13 +43,12 @@ public class ActivityServiceAdapter implements ActivityService {
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
 
-        String categoryName = inputs.categoryName();
-        Set<CategoryEntity> categoryEntity = categoryRepository.findByNameIgnoreCase(categoryName)
-                .orElseThrow(() -> new BadCredentialsException(categoryName));
-        entity.setCategories(categoryEntity);
+        List<Long> categoryIds = inputs.categoryIds();
+        Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(categoryIds));
+        entity.setCategories(categoryEntities);
 
         //todo: need to replace by email in token + handle case not found
-        String email = "lisa@gmail.com";
+        String email = utils.getAuthenticatedUser();
         UserEntity user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
 
@@ -62,6 +67,27 @@ public class ActivityServiceAdapter implements ActivityService {
         return new ActivityModel(entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(),
                 entity.getCategories().stream().map(c -> new ActivityModel.Category(c.getId(), c.getName())).toList());
     }
+
+    @Override
+    public void delete(final Long id){
+        activityRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(Long id, @Valid ActivityUpdate inputs){
+        ActivityEntity entity = activityRepository.findById(id).orElseThrow(()-> new NotFoundException("Activity with ID " + id + " not found"));
+
+        entity.setName(inputs.name());
+        entity.setDescription(inputs.description());
+        entity.setPositive(inputs.positive());
+
+        List<Long> categoryIds = inputs.categoryIds();
+        Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(categoryIds));
+        entity.setCategories(categoryEntities);
+
+        activityRepository.save(entity);
+    }
+
 }
 
 //Note: LocalDate.now() => return date
