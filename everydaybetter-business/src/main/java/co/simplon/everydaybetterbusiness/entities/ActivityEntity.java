@@ -85,7 +85,7 @@ public class ActivityEntity extends AbstractEntity {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", positive=" + positive +
-                ", labelEntity=" + categories +
+                ", categoryIds=" + categories +
                 ", userEntity=" + userEntity +
                 '}';
     }
