@@ -8,23 +8,27 @@ import jakarta.persistence.MappedSuperclass;
 import java.util.Objects;
 
 @MappedSuperclass
-public class AbstractEntity {
+public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     protected AbstractEntity() {
         //
     }
 
-    @SuppressWarnings("unused")
-    private void setId(long id) {
-        this.id = id;
-    }
+//    @SuppressWarnings("unused")
+//    private void setId(long id) {
+//        this.id = id;
+//    }
 
     @Override
     public boolean equals(Object o) {

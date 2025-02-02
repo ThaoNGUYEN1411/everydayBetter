@@ -11,7 +11,7 @@ import java.util.List;
 public interface ActivityService {
     void create(final ActivityCreate inputs);
 
-    List<ActivityDto> getAllActivities();
+    List<ActivityDto> getAllActivitiesByUser();
 
     ActivityModel findById(final Long id);
 

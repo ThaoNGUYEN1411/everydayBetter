@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,9 +44,13 @@ public class ActivityServiceAdapter implements ActivityService {
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
 
-        List<Long> categoryIds = inputs.categoryIds();
-        Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(categoryIds));
-        entity.setCategories(categoryEntities);
+        String categoryIds = inputs.categoryIds();
+        if (categoryIds != null){
+            Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(Collections.singleton(Long.parseLong(categoryIds))));
+            entity.setCategories(categoryEntities);
+        }else {
+            entity.setCategories(null);
+        }
 
         //todo: need to replace by email in token + handle case not found
         String email = utils.getAuthenticatedUser();
@@ -57,8 +62,13 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public List<ActivityDto> getAllActivities(){
-        return activityRepository.findAll().stream().map(act -> new ActivityDto(act.getId(), act.getName(), act.getPositive())).toList();
+    public List<ActivityDto> getAllActivitiesByUser(){
+        String email = utils.getAuthenticatedUser();
+        UserEntity user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new BadCredentialsException(email));
+        List<ActivityEntity> activities = activityRepository.findByUserId(user.getId()).orElseThrow(()-> new NotFoundException("Activity with ID not found"));
+
+        return activities.stream().map(act -> new ActivityDto(act.getId(), act.getName(), act.getPositive())).toList();
     }
 
     @Override

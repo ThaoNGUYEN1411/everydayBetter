@@ -33,7 +33,8 @@ public class UserEntity extends AbstractEntity {
         //default for ORM
     }
 
-    public UserEntity(String nickname, String email, String password, Set<RoleEntity> roles) {
+    public UserEntity( String nickname, String email, String password, Set<RoleEntity> roles) {
+        //this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;

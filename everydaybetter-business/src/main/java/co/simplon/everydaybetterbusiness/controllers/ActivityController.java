@@ -30,7 +30,7 @@ public class ActivityController {
         this.service = service;
     }
 
-    @PostMapping(value = {"","/"})
+    @PostMapping(value = {"","/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     void createActivity(@Valid @RequestBody final ActivityCreate inputs) {
 	    service.create(inputs);
@@ -38,8 +38,8 @@ public class ActivityController {
 
     @GetMapping(value = {"","/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    List<ActivityDto> getAllActivities(){
-        return service.getAllActivities();
+    List<ActivityDto> getAllActivitiesByUser(){
+        return service.getAllActivitiesByUser();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
