@@ -37,7 +37,7 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public void create(final ActivityCreate inputs){
+    public Void create(final ActivityCreate inputs){
         ActivityEntity entity = new ActivityEntity();
 
         entity.setName(inputs.name());
