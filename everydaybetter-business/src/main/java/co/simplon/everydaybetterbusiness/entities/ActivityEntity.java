@@ -25,15 +25,15 @@ public class ActivityEntity extends AbstractEntity {
     @Column(name = "is_positive", nullable = false, columnDefinition = "boolean default true")
     private Boolean positive;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
     @ManyToMany
     @JoinTable(name = "t_activities_categories",
             joinColumns = @JoinColumn(name = "activity_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<CategoryEntity> categories;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
 
     public ActivityEntity() {
         //ORM
