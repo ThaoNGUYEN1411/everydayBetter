@@ -8,6 +8,7 @@ import co.simplon.everydaybetterbusiness.services.ActivityService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,9 +32,8 @@ public class ActivityController {
     }
 
     @PostMapping(value = {"","/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    void createActivity(@Valid @RequestBody final ActivityCreate inputs) {
-	    service.create(inputs);
+    public ResponseEntity<Void> createActivity(@Valid @RequestBody final ActivityCreate inputs) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(inputs));
     }
 
     @GetMapping(value = {"","/"}, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,10 +57,10 @@ public class ActivityController {
     void update(@PathVariable Long id, @ModelAttribute ActivityUpdate inputs) {
         service.update(id, inputs);
     }
-
-
 }
 
 //todo: handle controller advice for unique habit
 //Validation inputs
 //learn more @ModelAttribute
+//use wrapper
+//learn: consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE

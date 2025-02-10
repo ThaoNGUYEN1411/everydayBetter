@@ -17,10 +17,13 @@ import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ActivityServiceAdapter implements ActivityService {
@@ -37,12 +40,13 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public void create(final ActivityCreate inputs){
+    public Void create(final ActivityCreate inputs){
         ActivityEntity entity = new ActivityEntity();
 
         entity.setName(inputs.name());
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
+
 
         String categoryIds = inputs.categoryIds();
         if (categoryIds != null){
@@ -52,13 +56,12 @@ public class ActivityServiceAdapter implements ActivityService {
             entity.setCategories(null);
         }
 
-        //todo: need to replace by email in token + handle case not found
-        String email = utils.getAuthenticatedUser();
+        String email = utils.getAuthenticatedUser(); //Retrieve the authenticated user
         UserEntity user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
-
         entity.setUserEntity(user);
         activityRepository.save(entity);
+        return null;
     }
 
     @Override
@@ -102,3 +105,11 @@ public class ActivityServiceAdapter implements ActivityService {
 
 //Note: LocalDate.now() => return date
 // Instant.now() => return un instant date + time
+
+//String categoryIds = inputs.categoryIds();
+//        if (categoryIds != null){
+//Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(Collections.singleton(Long.parseLong(categoryIds))));
+//            entity.setCategories(categoryEntities);
+//        }else {
+//                entity.setCategories(null);
+//        }

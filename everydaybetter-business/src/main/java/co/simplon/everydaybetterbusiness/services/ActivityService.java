@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 public interface ActivityService {
-    void create(final ActivityCreate inputs);
+    Void create(final ActivityCreate inputs);
 
     List<ActivityDto> getAllActivitiesByUser();
 
