@@ -2,7 +2,6 @@ package co.simplon.everydaybetterbusiness.services.adapter;
 
 import co.simplon.everydaybetterbusiness.common.Utils;
 import co.simplon.everydaybetterbusiness.dtos.input.ActivityCreate;
-import co.simplon.everydaybetterbusiness.dtos.input.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.dtos.output.ActivityDto;
 import co.simplon.everydaybetterbusiness.entities.ActivityEntity;
 import co.simplon.everydaybetterbusiness.entities.CategoryEntity;
@@ -13,14 +12,11 @@ import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;
 import co.simplon.everydaybetterbusiness.repositories.CategoryRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
-import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class ActivityServiceAdapter implements ActivityService {
@@ -44,15 +40,12 @@ public class ActivityServiceAdapter implements ActivityService {
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
 
-        String categoryIds = inputs.categoryIds();
-        if (categoryIds != null){
-            Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(Collections.singleton(Long.parseLong(categoryIds))));
-            entity.setCategories(categoryEntities);
-        }else {
-            entity.setCategories(null);
-        }
+        CategoryEntity category = Optional.ofNullable(inputs.categoryId())
+                .map(Long::parseLong)
+                .flatMap(categoryRepository::findById) //Optional<CategoryEntity> not Optional<Optional<T>>
+                .orElse(null);
+        entity.setCategoryEntity(category);
 
-        //todo: need to replace by email in token + handle case not found
         String email = utils.getAuthenticatedUser();
         UserEntity user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
@@ -74,8 +67,9 @@ public class ActivityServiceAdapter implements ActivityService {
     @Override
     public ActivityModel findById(final Long id){
         ActivityEntity entity = activityRepository.findById(id).orElseThrow(() -> new NotFoundException("Activity with ID " + id + " not found"));
-        return new ActivityModel(entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(),
-                entity.getCategories().stream().map(c -> new ActivityModel.Category(c.getId(), c.getName())).toList());
+
+        ActivityModel activityModel = new ActivityModel(entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(), entity.getCategoryEntity().getName());
+        return activityModel;
     }
 
     @Override
@@ -83,20 +77,20 @@ public class ActivityServiceAdapter implements ActivityService {
         activityRepository.deleteById(id);
     }
 
-    @Override
-    public void update(Long id, @Valid ActivityUpdate inputs){
-        ActivityEntity entity = activityRepository.findById(id).orElseThrow(()-> new NotFoundException("Activity with ID " + id + " not found"));
-
-        entity.setName(inputs.name());
-        entity.setDescription(inputs.description());
-        entity.setPositive(inputs.positive());
-
-        List<Long> categoryIds = inputs.categoryIds();
-        Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(categoryIds));
-        entity.setCategories(categoryEntities);
-
-        activityRepository.save(entity);
-    }
+//    @Override
+//    public void update(Long id, @Valid ActivityUpdate inputs){
+//        ActivityEntity entity = activityRepository.findById(id).orElseThrow(()-> new NotFoundException("Activity with ID " + id + " not found"));
+//
+//        entity.setName(inputs.name());
+//        entity.setDescription(inputs.description());
+//        entity.setPositive(inputs.positive());
+//
+//        List<Long> categoryIds = inputs.categoryIds();
+//        Set<CategoryEntity> categoryEntities = new HashSet<>(categoryRepository.findAllById(categoryIds));
+//        entity.setCategories(categoryEntities);
+//
+//        activityRepository.save(entity);
+//    }
 
 }
 

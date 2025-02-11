@@ -3,13 +3,10 @@ package co.simplon.everydaybetterbusiness.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.util.Objects;
-import java.util.Set;
 
 
 @Entity
@@ -25,11 +22,15 @@ public class ActivityEntity extends AbstractEntity {
     @Column(name = "is_positive", nullable = false, columnDefinition = "boolean default true")
     private Boolean positive;
 
-    @ManyToMany
-    @JoinTable(name = "t_activities_categories",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<CategoryEntity> categories;
+//    @ManyToMany
+//    @JoinTable(name = "t_activities_categories",
+//            joinColumns = @JoinColumn(name = "activity_id"),
+//            inverseJoinColumns = @JoinColumn(name = "category_id"))
+//    private Set<CategoryEntity> categories;
+
+    @ManyToOne
+    @JoinColumn(name = "actegory_id")
+    private CategoryEntity categoryEntity;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -51,8 +52,8 @@ public class ActivityEntity extends AbstractEntity {
         return positive;
     }
 
-    public Set<CategoryEntity> getCategories() {
-        return categories;
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
     }
 
     public UserEntity getUserEntity() {
@@ -71,8 +72,8 @@ public class ActivityEntity extends AbstractEntity {
         this.positive = positive;
     }
 
-    public void setCategories(Set<CategoryEntity> categories) {
-        this.categories = categories;
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
     }
 
     public void setUserEntity(UserEntity userEntity) {
@@ -85,7 +86,7 @@ public class ActivityEntity extends AbstractEntity {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", positive=" + positive +
-                ", categoryIds=" + categories +
+                ", categoryEntity=" + categoryEntity +
                 ", userEntity=" + userEntity +
                 '}';
     }
