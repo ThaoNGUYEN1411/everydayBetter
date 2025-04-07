@@ -78,7 +78,12 @@ public class Config {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req-> req
-                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate", "/users/logout").anonymous())
 
                 .authorizeHttpRequests(
                         req -> req.requestMatchers(HttpMethod.GET, "/users/with-role").hasRole("ADMIN"))

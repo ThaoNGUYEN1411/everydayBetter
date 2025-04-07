@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "t_activities")
-public class ActivityEntity extends AbstractEntity {
+public class Activity extends AbstractEntity {
 
     @Column(name = "activity_name", nullable = false)
     private String name;
@@ -29,13 +29,13 @@ public class ActivityEntity extends AbstractEntity {
     @JoinTable(name = "t_activities_categories",
             joinColumns = @JoinColumn(name = "activity_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<CategoryEntity> categories;
+    private Set<Category> categories;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    private User user;
 
-    public ActivityEntity() {
+    public Activity() {
         //ORM
     }
 
@@ -51,12 +51,12 @@ public class ActivityEntity extends AbstractEntity {
         return positive;
     }
 
-    public Set<CategoryEntity> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public User getUser() {
+        return user;
     }
 
     public void setName(String name) {
@@ -71,33 +71,33 @@ public class ActivityEntity extends AbstractEntity {
         this.positive = positive;
     }
 
-    public void setCategories(Set<CategoryEntity> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
-        return "ActivityEntity{" +
+        return "Activity{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", positive=" + positive +
                 ", categoryIds=" + categories +
-                ", userEntity=" + userEntity +
+                ", user=" + user +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        return o instanceof ActivityEntity other && name.equals(other.name) && userEntity.equals(other.userEntity);
+        return o instanceof Activity other && name.equals(other.name) && user.equals(other.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, userEntity);
+        return Objects.hash(name, user);
     }
 }

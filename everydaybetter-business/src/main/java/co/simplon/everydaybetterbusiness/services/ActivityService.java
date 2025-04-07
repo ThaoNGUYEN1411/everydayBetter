@@ -1,7 +1,7 @@
 package co.simplon.everydaybetterbusiness.services;
 
-import co.simplon.everydaybetterbusiness.dtos.input.ActivityCreate;
-import co.simplon.everydaybetterbusiness.dtos.input.ActivityUpdate;
+import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
+import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.dtos.output.ActivityDto;
 import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import jakarta.validation.Valid;

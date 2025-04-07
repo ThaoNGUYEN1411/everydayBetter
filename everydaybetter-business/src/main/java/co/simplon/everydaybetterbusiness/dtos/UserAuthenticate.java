@@ -1,4 +1,4 @@
-package co.simplon.everydaybetterbusiness.dtos.input;
+package co.simplon.everydaybetterbusiness.dtos;
 
 public record UserAuthenticate(String email, String password) {
     @Override

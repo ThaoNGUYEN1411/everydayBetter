@@ -1,9 +1,9 @@
 package co.simplon.everydaybetterbusiness.services;
 
-import co.simplon.everydaybetterbusiness.dtos.output.CategoryDto;
+import co.simplon.everydaybetterbusiness.models.CategoryModel;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDto> getAll();
+    List<CategoryModel> getAll();
 }

@@ -1,11 +1,11 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
 import co.simplon.everydaybetterbusiness.config.JwtProvider;
-import co.simplon.everydaybetterbusiness.dtos.input.UserAuthenticate;
-import co.simplon.everydaybetterbusiness.dtos.input.UserCreate;
+import co.simplon.everydaybetterbusiness.dtos.UserAuthenticate;
+import co.simplon.everydaybetterbusiness.dtos.UserCreate;
 import co.simplon.everydaybetterbusiness.dtos.output.AuthInfo;
-import co.simplon.everydaybetterbusiness.entities.RoleEntity;
-import co.simplon.everydaybetterbusiness.entities.UserEntity;
+import co.simplon.everydaybetterbusiness.entities.Role;
+import co.simplon.everydaybetterbusiness.entities.User;
 import co.simplon.everydaybetterbusiness.repositories.RoleRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
 import co.simplon.everydaybetterbusiness.services.UserService;
@@ -39,20 +39,20 @@ public class UserServiceAdapter implements UserService {
         String password = passwordEncoder.encode(inputs.password());
         String email = inputs.email();
 //todo: verify with 401 nickname
-        Set<RoleEntity> roleDefaultValue = roleRepository.findByRoleDefaultTrue()
+        Set<Role> roleDefaultValue = roleRepository.findByRoleDefaultTrue()
                 .orElseThrow(() -> new BadCredentialsException(nickname));
 
-        UserEntity entity = new UserEntity(nickname,email,password, roleDefaultValue);
+        User entity = new User(nickname,email,password, roleDefaultValue);
         userRepository.save(entity);
     }
 
     @Override
     public AuthInfo authenticate(UserAuthenticate inputs, HttpServletResponse response){
         String email = inputs.email();
-        UserEntity user = userRepository.findByEmailIgnoreCase(email)
+        User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
 
-        List<String> roles = user.getRoles().stream().map(RoleEntity::getName).toList();
+        List<String> roles = user.getRoles().stream().map(Role::getName).toList();
 
         String row = inputs.password();
         String encoded = user.getPassword();
@@ -67,9 +67,23 @@ public class UserServiceAdapter implements UserService {
         cookie.setHttpOnly(true);
         cookie.setSecure(true); // Use secure cookies (only over HTTPS)
         cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+        //cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
         response.addCookie(cookie);
 
-        return new AuthInfo(token, roles);
+        return new AuthInfo(user.getNickname(), roles);
     }
+//    public void logout(HttpServletResponse response){
+//        System.out.println("remove cookie");
+//        Cookie cookie = new Cookie("jwt", "");
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+//        cookie.setMaxAge(0); // Expire immédiatement
+//        response.addCookie(cookie);
+//    }
 }
+
+/*
+Why do we need to add a new cookie instead of updating it in logout?
+Cookies are managed by the browser, and once set, they cannot be directly updated or removed from the server. Instead, we can only instruct the browser to overwrite the existing cookie by sending a new cookie with the same name (jwt) but an empty value and an immediate expiration.
+ */

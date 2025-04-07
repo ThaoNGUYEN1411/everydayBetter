@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
-import co.simplon.everydaybetterbusiness.dtos.output.CategoryDto;
+import co.simplon.everydaybetterbusiness.models.CategoryModel;
 import co.simplon.everydaybetterbusiness.repositories.CategoryRepository;
 import co.simplon.everydaybetterbusiness.services.CategoryService;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ public class CategoryServiceAdapter implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getAll(){
+    public List<CategoryModel> getAll(){
         return repository.findAll().stream().map(c ->
-                   new CategoryDto(c.getId(), c.getName())
+                   new CategoryModel(c.getId(), c.getName())
         ).toList();
     }
 

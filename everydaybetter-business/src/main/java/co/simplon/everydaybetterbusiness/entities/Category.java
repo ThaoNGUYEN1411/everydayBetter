@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "t_categories")
-public class CategoryEntity extends AbstractEntity {
+public class Category extends AbstractEntity {
 
     @Column(name = "category_name")
     private String name;
@@ -20,7 +20,7 @@ public class CategoryEntity extends AbstractEntity {
 //        )
 //    private ActivityEntity activities;
 
-    public CategoryEntity() {
+    public Category() {
         //Default for ORM
     }
 
@@ -43,7 +43,7 @@ public class CategoryEntity extends AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        return o instanceof CategoryEntity other && name.equals(other.name);
+        return o instanceof Category other && name.equals(other.name);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CategoryEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "CategoryEntity{" +
+        return "Category{" +
                 "name='" + name + '\'' +
                 '}';
     }

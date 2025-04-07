@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name= "t_users")
-public class UserEntity extends AbstractEntity {
+public class User extends AbstractEntity {
 
     @Column(name = "nickname")
     private String nickname;
@@ -27,13 +27,13 @@ public class UserEntity extends AbstractEntity {
 //     fetch = FetchType.LAZY: default
     @ManyToMany
     @JoinTable(name = "t_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RoleEntity> roles;
+    private Set<Role> roles;
 
-    public UserEntity() {
+    public User() {
         //default for ORM
     }
 
-    public UserEntity( String nickname, String email, String password, Set<RoleEntity> roles) {
+    public User(String nickname, String email, String password, Set<Role> roles) {
         //this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -53,7 +53,7 @@ public class UserEntity extends AbstractEntity {
         return password;
     }
 
-    public Set<RoleEntity> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
@@ -83,7 +83,7 @@ public class UserEntity extends AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        return o instanceof UserEntity other && email.equals(other.email);
+        return o instanceof User other && email.equals(other.email);
     }
 
     @Override

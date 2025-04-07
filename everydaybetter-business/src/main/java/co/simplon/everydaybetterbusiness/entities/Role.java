@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "t_roles")
-public class RoleEntity extends AbstractEntity {
+public class Role extends AbstractEntity {
 
     @Column(name = "role_name")
     private String name;
@@ -16,7 +16,7 @@ public class RoleEntity extends AbstractEntity {
     @Column(name = "is_default")
     private Boolean roleDefault;
 
-    public RoleEntity() {
+    public Role() {
         //ORM
     }
 
@@ -38,7 +38,7 @@ public class RoleEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "RoleEntity{" +
+        return "Role{" +
                 "name='" + name + '\'' +
                 ", roleDefault=" + roleDefault +
                 '}';
@@ -47,7 +47,7 @@ public class RoleEntity extends AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        return o instanceof RoleEntity other && name.equals(other.name);
+        return o instanceof Role other && name.equals(other.name);
     }
 
     @Override

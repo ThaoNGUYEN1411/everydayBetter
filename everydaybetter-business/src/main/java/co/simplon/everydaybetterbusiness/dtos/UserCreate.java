@@ -1,4 +1,4 @@
-package co.simplon.everydaybetterbusiness.dtos.input;
+package co.simplon.everydaybetterbusiness.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
