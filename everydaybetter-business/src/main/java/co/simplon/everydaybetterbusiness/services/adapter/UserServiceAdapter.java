@@ -72,6 +72,11 @@ public class UserServiceAdapter implements UserService {
 
         return new AuthInfo(user.getNickname(), roles);
     }
+
+    @Override
+    public User findByEmailIgnoreCase(String email) {
+        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new BadCredentialsException(email));
+    }
 //    public void logout(HttpServletResponse response){
 //        System.out.println("remove cookie");
 //        Cookie cookie = new Cookie("jwt", "");

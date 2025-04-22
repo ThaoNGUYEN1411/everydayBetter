@@ -8,5 +8,5 @@ public record ActivityCreate(
         @NotBlank @Size(max = 200) String name,
         @Size(max = 5000) String description,
         @NotNull Boolean positive,
-        String categoryIds) {
+        String categoryId) {
 }

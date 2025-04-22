@@ -10,7 +10,10 @@ DELETE FROM t_roles;
 INSERT INTO t_roles (role_name, is_default) VALUES
 	('ROLE_USER', true), ('ROLE_ADMIN', false);
 
-INSERT INTO t_categories (category_name) VALUES ('Ecole'), ('Santé');
+INSERT INTO t_categories (category_name) VALUES 
+('Santé et Bien-être'), ('Productivité et Travail'), ('Vie quotidienne'), ('test');
+
+INSERT INTO t_categories (category_name) VALUES ('test1'), ('test2');
 
 SELECT * FROM t_activities;
 SELECT * FROM t_categories tr ;

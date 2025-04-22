@@ -3,13 +3,10 @@ package co.simplon.everydaybetterbusiness.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.util.Objects;
-import java.util.Set;
 
 
 @Entity
@@ -25,14 +22,18 @@ public class Activity extends AbstractEntity {
     @Column(name = "is_positive", nullable = false, columnDefinition = "boolean default true")
     private Boolean positive;
 
-    @ManyToMany
-    @JoinTable(name = "t_activities_categories",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+//    @ManyToMany
+//    @JoinTable(name = "t_activities_categories",
+//            joinColumns = @JoinColumn(name = "activity_id"),
+//            inverseJoinColumns = @JoinColumn(name = "category_id"))
+//    private Set<Category> categories;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "category_id", nullable=false)
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable=false)
     private User user;
 
     public Activity() {
@@ -51,8 +52,8 @@ public class Activity extends AbstractEntity {
         return positive;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
     public User getUser() {
@@ -71,12 +72,13 @@ public class Activity extends AbstractEntity {
         this.positive = positive;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
-    }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
@@ -85,7 +87,7 @@ public class Activity extends AbstractEntity {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", positive=" + positive +
-                ", categoryIds=" + categories +
+                ", category=" + category +
                 ", user=" + user +
                 '}';
     }

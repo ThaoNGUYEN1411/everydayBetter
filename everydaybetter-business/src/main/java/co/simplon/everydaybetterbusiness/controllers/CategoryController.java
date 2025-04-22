@@ -23,9 +23,10 @@ public class CategoryController {
         this.service = service;
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<CategoryModel>> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
     }
+
 }
-//document rest api
+//@SecurityRequirement(name = "bearerAuth"): une annotation utilisée avec Swagger/OpenAPI,  l’utilisateur doit être authentifié

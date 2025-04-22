@@ -20,7 +20,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserService service;
 
@@ -40,6 +39,7 @@ public class UserController {
         return service.authenticate(inputs, response);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> logout(HttpServletResponse response) {

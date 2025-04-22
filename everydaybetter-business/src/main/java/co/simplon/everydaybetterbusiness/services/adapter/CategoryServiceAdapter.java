@@ -1,5 +1,6 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
+import co.simplon.everydaybetterbusiness.entities.Category;
 import co.simplon.everydaybetterbusiness.models.CategoryModel;
 import co.simplon.everydaybetterbusiness.repositories.CategoryRepository;
 import co.simplon.everydaybetterbusiness.services.CategoryService;
@@ -23,4 +24,9 @@ public class CategoryServiceAdapter implements CategoryService {
         ).toList();
     }
 
+    //todo: handle exception
+    @Override
+    public Category findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
+    }
 }

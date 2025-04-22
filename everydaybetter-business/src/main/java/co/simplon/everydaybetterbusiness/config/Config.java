@@ -87,10 +87,19 @@ public class Config {
 
                 .authorizeHttpRequests(
                         req -> req.requestMatchers(HttpMethod.GET, "/users/with-role").hasRole("ADMIN"))
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/categories").permitAll())
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/activities", "/activities/**").permitAll()
+                )
 
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
-                .oauth2ResourceServer(srv-> srv.jwt(Customizer.withDefaults()))
-                .build();
+                .oauth2ResourceServer(oauth2 -> {
+                    oauth2
+                            .bearerTokenResolver(new CookieTokenResolver()) // Utilise le resolver personnalisé
+                            .jwt(Customizer.withDefaults());
+                } // Configuration JWT par défaut
+        )              .build();
     }
 }
+
+//.oauth2ResourceServer(srv -> srv.jwt(Customizer.withDefaults())) => use par defaul dans JWT dans l’en-tête Authorization: Bearer
