@@ -2,7 +2,7 @@ package co.simplon.everydaybetterbusiness.controllers;
 
 import co.simplon.everydaybetterbusiness.dtos.UserAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.UserCreate;
-import co.simplon.everydaybetterbusiness.dtos.output.AuthInfo;
+import co.simplon.everydaybetterbusiness.models.AuthInfo;
 import co.simplon.everydaybetterbusiness.services.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.Cookie;

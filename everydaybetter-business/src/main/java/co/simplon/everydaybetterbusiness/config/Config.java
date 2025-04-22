@@ -90,6 +90,8 @@ public class Config {
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/categories").permitAll())
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/activities", "/activities/**").permitAll()
                 )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/activities", "/activities/**").permitAll()
+                )
 
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
