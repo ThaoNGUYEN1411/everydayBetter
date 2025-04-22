@@ -2,7 +2,7 @@ package co.simplon.everydaybetterbusiness.services;
 
 import co.simplon.everydaybetterbusiness.dtos.UserAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.UserCreate;
-import co.simplon.everydaybetterbusiness.dtos.output.AuthInfo;
+import co.simplon.everydaybetterbusiness.models.AuthInfo;
 import co.simplon.everydaybetterbusiness.entities.User;
 import jakarta.servlet.http.HttpServletResponse;
 

@@ -1,4 +1,4 @@
-package co.simplon.everydaybetterbusiness.dtos.output;
+package co.simplon.everydaybetterbusiness.models;
 
 import java.util.List;
 
