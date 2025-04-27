@@ -83,12 +83,12 @@ public class Config {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate", "/users/logout").anonymous())
+                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
 
                 .authorizeHttpRequests(
                         req -> req.requestMatchers(HttpMethod.GET, "/users/with-role").hasRole("ADMIN"))
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/categories").permitAll())
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/activities", "/activities/**").permitAll()
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/activities", "/activities/**", "/users/logout").permitAll()
                 )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/activities", "/activities/**").permitAll()
                 )

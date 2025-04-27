@@ -9,11 +9,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -27,21 +27,19 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping(value = "/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    void create( @RequestBody UserCreate inputs){
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> create( @RequestBody UserCreate inputs){
         service.create(inputs);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/authenticate")
-    @ResponseStatus(HttpStatus.CREATED)
-    AuthInfo authenticate(@Valid @RequestBody UserAuthenticate inputs, HttpServletResponse response) {
-        return service.authenticate(inputs, response);
+    ResponseEntity<AuthInfo> authenticate(@Valid @RequestBody UserAuthenticate inputs, HttpServletResponse response) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.authenticate(inputs, response));
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/logout")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("jwt", "");
         cookie.setHttpOnly(true);
@@ -49,8 +47,7 @@ public class UserController {
         cookie.setPath("/");
         cookie.setMaxAge(0); // Expire immédiatement
         response.addCookie(cookie);
-
-        return ResponseEntity.ok().body(Map.of("message", "Logged out successfully"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Logged out successfully"));
     }
 }
 
