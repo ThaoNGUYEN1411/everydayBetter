@@ -53,10 +53,11 @@ public class ActivityController {
         service.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-//
+
 //    @PutMapping("/{id}")
-//    void update(@PathVariable Long id, @ModelAttribute ActivityUpdate inputs) {
+//    ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute ActivityUpdate inputs) {
 //        service.update(id, inputs);
+//        return ResponseEntity.status(HttpStatus.OK).build();
 //    }
 
 }
