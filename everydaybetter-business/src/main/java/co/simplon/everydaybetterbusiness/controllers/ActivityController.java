@@ -1,6 +1,7 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
+import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
 import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import co.simplon.everydaybetterbusiness.services.ActivityManagerService;
@@ -12,8 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,12 +57,11 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-//    @PutMapping("/{id}")
-//    ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute ActivityUpdate inputs) {
-//        service.update(id, inputs);
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//    }
-
+    @PutMapping("/{id}")
+    ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute @Valid ActivityUpdate inputs) {
+        activityManagerService.update(id, inputs);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
 
 //todo: handle controller advice for unique habit

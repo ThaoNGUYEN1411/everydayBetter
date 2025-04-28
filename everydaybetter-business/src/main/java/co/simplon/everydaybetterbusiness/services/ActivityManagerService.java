@@ -1,6 +1,7 @@
 package co.simplon.everydaybetterbusiness.services;
 
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
+import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
 import co.simplon.everydaybetterbusiness.models.ActivityModel;
 
@@ -12,4 +13,6 @@ public interface ActivityManagerService {
     List<ActivityModel> getAllActivitiesByUser();
 
     ActivityDetailModel findById(Long id);
+
+    void update(Long id, ActivityUpdate inputs);
 }

@@ -3,19 +3,22 @@ package co.simplon.everydaybetterbusiness.services.adapter;
 import co.simplon.everydaybetterbusiness.common.Utils;
 import co.simplon.everydaybetterbusiness.config.JwtHelper;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
-import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
-import co.simplon.everydaybetterbusiness.models.ActivityModel;
+import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
 import co.simplon.everydaybetterbusiness.entities.Category;
 import co.simplon.everydaybetterbusiness.entities.User;
+import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
+import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import co.simplon.everydaybetterbusiness.services.ActivityManagerService;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
 import co.simplon.everydaybetterbusiness.services.CategoryService;
 import co.simplon.everydaybetterbusiness.services.UserService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ActivityManagerServiceAdapter implements ActivityManagerService {
@@ -70,5 +73,28 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
         }
         return new ActivityDetailModel(entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(),
                 new ActivityDetailModel.Category(entity.getCategory().getId(), entity.getCategory().getName()));
+    }
+
+    @Override
+    @Transactional
+    public void update(Long id, ActivityUpdate inputs) {
+        Activity entity = activityService.findById(id);
+
+        final String email = utils.getAuthenticatedUser();
+        final User user = userService.findByEmailIgnoreCase(email);
+        if (Objects.equals(user.getId(), entity.getUser().getId())){
+            entity.setName(inputs.name());
+            entity.setDescription(inputs.description());
+            entity.setPositive(inputs.positive());
+            Long categoryId = Long.valueOf(inputs.categoryId());
+            Category category = categoryService.findById(categoryId);
+            entity.setCategory(category);
+            activityService.save(entity);
+        }else {
+            //System.out.println("user cannot modify this activity");
+            //todo Thao: replace by handleEx 403
+            throw new BadCredentialsException(email);
+        }
+
     }
 }

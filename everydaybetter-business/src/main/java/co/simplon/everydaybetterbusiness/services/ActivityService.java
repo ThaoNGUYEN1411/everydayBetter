@@ -15,5 +15,4 @@ public interface ActivityService {
 
     void delete(Long id);
 
-//    void update(Long id, @Valid ActivityUpdate inputs);
 }

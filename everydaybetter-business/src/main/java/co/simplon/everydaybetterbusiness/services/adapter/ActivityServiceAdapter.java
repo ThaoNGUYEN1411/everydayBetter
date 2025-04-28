@@ -35,21 +35,6 @@ public class ActivityServiceAdapter implements ActivityService {
     public void delete(final Long id){
         activityRepository.deleteById(id);
     }
-
-//    @Override
-//    public void update(Long id, @Valid ActivityUpdate inputs){
-//        Activity entity = activityRepository.findById(id).orElseThrow(()-> new NotFoundException("Activity with ID " + id + " not found"));
-//
-//        entity.setName(inputs.name());
-//        entity.setDescription(inputs.description());
-//        entity.setPositive(inputs.positive());
-//
-//        List<Long> categoryIds = inputs.categoryIds();
-//        Set<Category> categories = new HashSet<>(categoryRepository.findAllById(categoryIds));
-//        entity.setCategories(categories);
-//
-//        activityRepository.save(entity);
-//    }
 }
 
 //Note: LocalDate.now() => return date
