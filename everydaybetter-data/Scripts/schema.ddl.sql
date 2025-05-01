@@ -28,9 +28,11 @@ CREATE TABLE t_activities(
     description VARCHAR(2000),
     is_positive BOOLEAN NOT NULL,
     user_id INT,
+    category_id INT,
     CONSTRAINT t_activities_pkey PRIMARY KEY(id),   
     CONSTRAINT t_activities_activity_name_user_id_ukey UNIQUE (activity_name, user_id),
-    CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id)
+    CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
+    CONSTRAINT t_activities_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id)
 );
 
 CREATE TABLE t_tracking_logs(
@@ -43,13 +45,13 @@ CREATE TABLE t_tracking_logs(
 	CONSTRAINT t_tracking_logs_activities_fkey FOREIGN KEY (activity_id) REFERENCES t_activities (id)
 );
 
-CREATE TABLE t_activities_categories(
-	activity_id INT NOT NULL,
-	category_id INT NOT NULL,
-	CONSTRAINT t_activities_categories_activities_fkey FOREIGN KEY (activity_id) REFERENCES t_activities (id),
-	CONSTRAINT t_activities_categories_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id),
-	CONSTRAINT t_activities_categories_ukey UNIQUE (activity_id, category_id)
-);
+--CREATE TABLE t_activities_categories(
+--	activity_id INT NOT NULL,
+--	category_id INT NOT NULL,
+--	CONSTRAINT t_activities_categories_activities_fkey FOREIGN KEY (activity_id) REFERENCES t_activities (id),
+--	CONSTRAINT t_activities_categories_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id),
+--	CONSTRAINT t_activities_categories_ukey UNIQUE (activity_id, category_id)
+--);
 
 CREATE TABLE t_roles(
 	id INT GENERATED ALWAYS AS IDENTITY,
