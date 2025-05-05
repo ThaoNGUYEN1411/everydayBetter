@@ -1,6 +1,9 @@
 package co.simplon.everydaybetterbusiness.dtos;
 
-public record UserAuthenticate(String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record UserAuthenticate(@NotBlank @Size(max = 340) String email, @NotBlank @Size(max = 255) String password) {
     @Override
     public String toString() {
         return "{email=" + email + ", password=[PROTECTED]}";

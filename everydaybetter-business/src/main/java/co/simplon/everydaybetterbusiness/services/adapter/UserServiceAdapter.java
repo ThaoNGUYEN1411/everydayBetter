@@ -34,7 +34,7 @@ public class UserServiceAdapter implements UserService {
     }
 
     @Override
-    public void create(UserCreate inputs){
+    public void create(UserCreate inputs) {
         String nickname = inputs.nickname();
         String password = passwordEncoder.encode(inputs.password());
         String email = inputs.email();
@@ -42,12 +42,12 @@ public class UserServiceAdapter implements UserService {
         Set<Role> roleDefaultValue = roleRepository.findByRoleDefaultTrue()
                 .orElseThrow(() -> new BadCredentialsException(nickname));
 
-        User entity = new User(nickname,email,password, roleDefaultValue);
+        User entity = new User(nickname, email, password, roleDefaultValue);
         userRepository.save(entity);
     }
 
     @Override
-    public AuthInfo authenticate(UserAuthenticate inputs, HttpServletResponse response){
+    public AuthInfo authenticate(UserAuthenticate inputs, HttpServletResponse response) {
         String email = inputs.email();
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
@@ -74,7 +74,7 @@ public class UserServiceAdapter implements UserService {
     }
 
     @Override
-    public User findByEmailIgnoreCase(String email) {
+    public User findByEmailIgnoreCase(final String email) {
         return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new BadCredentialsException(email));
     }
 //    public void logout(HttpServletResponse response){
@@ -86,8 +86,12 @@ public class UserServiceAdapter implements UserService {
 //        cookie.setMaxAge(0); // Expire immédiatement
 //        response.addCookie(cookie);
 //    }
-}
 
+    @Override
+    public boolean existsByEmailIgnoreCase(final String email) { //final that you cannot reassign a new value to that parameter within the method body.Without final Without final => but not good!!!
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+}
 /*
 Why do we need to add a new cookie instead of updating it in logout?
 Cookies are managed by the browser, and once set, they cannot be directly updated or removed from the server. Instead, we can only instruct the browser to overwrite the existing cookie by sending a new cookie with the same name (jwt) but an empty value and an immediate expiration.

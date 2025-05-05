@@ -13,5 +13,7 @@ public interface UserService {
 
     User findByEmailIgnoreCase(String email);
 
+    boolean existsByEmailIgnoreCase(String value);
+
 //    void logout(HttpServletResponse response);
 }

@@ -28,12 +28,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> create( @RequestBody UserCreate inputs){
+    ResponseEntity<Void> create(@Valid @RequestBody UserCreate inputs){
         service.create(inputs);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<AuthInfo> authenticate(@Valid @RequestBody UserAuthenticate inputs, HttpServletResponse response) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.authenticate(inputs, response));
     }
@@ -48,6 +48,7 @@ public class UserController {
         cookie.setMaxAge(0); // Expire immédiatement
         response.addCookie(cookie);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Logged out successfully"));
+        //todo Thao: to handle remove cookie front
     }
 }
 

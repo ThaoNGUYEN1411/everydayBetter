@@ -72,11 +72,11 @@ public class User extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "AccountEntity{"+
-                ", nickname='" + nickname + '\'' +
+        return "User{" +
+                "nickname='" + nickname + '\'' +
                 ", email='" + email + '\'' +
-                ", password='PROTECTED" + '\'' +
-                ", roles=LAZY8LOADING" +
+                ", password='" + "PROTECTED" + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 

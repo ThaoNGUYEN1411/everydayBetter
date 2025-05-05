@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     Optional<List<Activity>> findByUserId(Long id);
+
+    boolean existsByNameIgnoreCaseAndUserId(String name, Long userId);
 }
