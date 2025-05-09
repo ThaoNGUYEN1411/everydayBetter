@@ -10,11 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME) //fait partie de Java et est utilisée pour définir la durée de vie (persistence) d'une annotation personnalisée.
-@Target(ElementType.FIELD) //This custom annotation can be applied to fields
+@Target({ElementType.FIELD}) //This custom annotation can be applied to fields
 @Documented //This makes the annotation appear in Javadoc.
 @Constraint(validatedBy = UniqueEmailValidator.class) //Constraint of the logic for checking unique email
 public @interface UniqueEmail {
-    String message() default "L'email doit unique"; // Default error message when validation fails
+    String message() default "Email already in use"; // Default error message when validation fails
 
     Class<?>[] groups() default {}; //Used for validation groups (optional, rarely used in simple cases) => regrouper des errors
 

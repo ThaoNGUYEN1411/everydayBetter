@@ -6,6 +6,8 @@ import co.simplon.everydaybetterbusiness.models.AuthInfo;
 import co.simplon.everydaybetterbusiness.entities.User;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Map;
+
 public interface UserService {
     void create(UserCreate inputs);
 
@@ -15,5 +17,5 @@ public interface UserService {
 
     boolean existsByEmailIgnoreCase(String value);
 
-//    void logout(HttpServletResponse response);
+    Map<String, Object> logout(HttpServletResponse response);
 }

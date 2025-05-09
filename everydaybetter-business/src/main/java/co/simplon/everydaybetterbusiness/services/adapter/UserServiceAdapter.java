@@ -16,10 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
-public class UserServiceAdapter implements UserService {
+public abstract class UserServiceAdapter implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -77,15 +78,18 @@ public class UserServiceAdapter implements UserService {
     public User findByEmailIgnoreCase(final String email) {
         return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new BadCredentialsException(email));
     }
-//    public void logout(HttpServletResponse response){
-//        System.out.println("remove cookie");
-//        Cookie cookie = new Cookie("jwt", "");
-//        cookie.setHttpOnly(true);
-//        cookie.setSecure(true);
-//        cookie.setPath("/");
-//        cookie.setMaxAge(0); // Expire immédiatement
-//        response.addCookie(cookie);
-//    }
+
+    @Override
+    public Map<String, Object> logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("jwt", "");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // Expire immediately
+        response.addCookie(cookie);
+
+        return Map.of("message", "Logged out successfully");
+    }
 
     @Override
     public boolean existsByEmailIgnoreCase(final String email) { //final that you cannot reassign a new value to that parameter within the method body.Without final Without final => but not good!!!
