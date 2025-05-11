@@ -4,7 +4,6 @@ import co.simplon.everydaybetterbusiness.entities.Activity;
 
 import java.util.List;
 
-
 public interface ActivityService {
 
     void save(Activity entity);
@@ -14,5 +13,4 @@ public interface ActivityService {
     Activity findById(Long id);
 
     void delete(Long id);
-
 }

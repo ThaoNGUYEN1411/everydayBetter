@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.validators;
 
-import co.simplon.everydaybetterbusiness.common.Utils;
+import co.simplon.everydaybetterbusiness.common.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.entities.User;
 import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;
@@ -10,11 +10,11 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class UniqueUserActivityValidator implements ConstraintValidator<UniqueUserActivity, ActivityCreate> {
     private final ActivityRepository repository;
-    private final Utils utils;
+    private final AppUtils utils;
     private final UserRepository userRepository;
 
 
-    public UniqueUserActivityValidator(ActivityRepository repository, Utils utils, UserRepository userRepository) {
+    public UniqueUserActivityValidator(ActivityRepository repository, AppUtils utils, UserRepository userRepository) {
         this.repository = repository;
         this.utils = utils;
         this.userRepository = userRepository;
