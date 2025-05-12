@@ -38,6 +38,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request){
         final String message = exception.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(","));
         final var errorDetails = new ErrorDto(message);
+        logger.error(message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
     }
 

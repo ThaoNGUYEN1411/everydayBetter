@@ -28,7 +28,10 @@ public class TrackingRecordForUserActivityServiceAdapter implements TrackingReco
         entity.setActivity(activity);
         entity.setTrackedDate(inputs.trackedDate());
         entity.setDone(inputs.done());
-        //import avec nom de class car on utiliser method static
+        // Vérifier l'existence de l’utilisateur et de l’activité
+
+
+        //import toModel avec nom de class car on utiliser method static
         return TrackingRecordMapper.toModel(trackingRecordService.save(entity));
     }
 }

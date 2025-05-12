@@ -1,5 +1,6 @@
 package co.simplon.everydaybetterbusiness.dtos;
 
+import co.simplon.everydaybetterbusiness.validators.UniqueUserActivity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
