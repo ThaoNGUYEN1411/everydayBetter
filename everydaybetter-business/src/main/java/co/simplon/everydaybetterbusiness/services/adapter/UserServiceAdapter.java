@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
-public abstract class UserServiceAdapter implements UserService {
+public class UserServiceAdapter implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -62,7 +62,7 @@ public abstract class UserServiceAdapter implements UserService {
         }
 
         String token = jwtProvider.create(email, roles);
-
+        System.out.println(token);
         // Set the HTTP-only cookie
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);

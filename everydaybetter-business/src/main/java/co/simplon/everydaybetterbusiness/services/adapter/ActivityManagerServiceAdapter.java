@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
-import co.simplon.everydaybetterbusiness.common.Utils;
+import co.simplon.everydaybetterbusiness.common.AppUtils;
 import co.simplon.everydaybetterbusiness.config.JwtHelper;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
@@ -26,9 +26,9 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     private final UserService userService;
     private final CategoryService categoryService;
     private final JwtHelper jwtHelper;
-    private final Utils utils;
+    private final AppUtils utils;
 
-    public ActivityManagerServiceAdapter(ActivityService activityService, UserService userService, CategoryService categoryService, JwtHelper jwtHelper, Utils utils) {
+    public ActivityManagerServiceAdapter(ActivityService activityService, UserService userService, CategoryService categoryService, JwtHelper jwtHelper, AppUtils utils) {
         this.activityService = activityService;
         this.userService = userService;
         this.categoryService = categoryService;
