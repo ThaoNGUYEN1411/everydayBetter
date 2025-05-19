@@ -25,21 +25,21 @@ public class UserController {
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> create(@Valid @RequestBody UserCreate inputs){
+    public ResponseEntity<Void> create(@Valid @RequestBody UserCreate inputs) {
         service.create(inputs);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<AuthInfo> authenticate(@Valid @RequestBody UserAuthenticate inputs, HttpServletResponse response) {
+    public ResponseEntity<AuthInfo> authenticate(@Valid @RequestBody UserAuthenticate inputs, HttpServletResponse response) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.authenticate(inputs, response));
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping("/logout")
-    public ResponseEntity<Object> logout(HttpServletResponse response) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.logout(response));
-        //todo Thao: to handle remove cookie front
+    @PostMapping(value = "/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+            service.logout(response);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
 

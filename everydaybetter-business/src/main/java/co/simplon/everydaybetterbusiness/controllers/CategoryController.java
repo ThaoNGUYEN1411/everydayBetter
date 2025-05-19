@@ -24,7 +24,7 @@ public class CategoryController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<CategoryModel>> getAll(){
+    public ResponseEntity<List<CategoryModel>> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
     }
 

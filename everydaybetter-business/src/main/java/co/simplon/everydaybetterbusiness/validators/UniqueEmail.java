@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Documented //This makes the annotation appear in Javadoc.
 @Constraint(validatedBy = UniqueEmailValidator.class) //Constraint of the logic for checking unique email
 public @interface UniqueEmail {
-    String message() default "Email already in use"; // Default error message when validation fails
+    String message() default "Email is already exists"; // Default error message when validation fails
 
     Class<?>[] groups() default {}; //Used for validation groups (optional, rarely used in simple cases) => regrouper des errors
 

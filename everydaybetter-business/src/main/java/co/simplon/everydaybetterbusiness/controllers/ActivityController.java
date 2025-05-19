@@ -36,29 +36,29 @@ public class ActivityController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createActivity(@Valid @RequestBody final ActivityCreate inputs) {
+    public ResponseEntity<Void> createActivity(@Valid @RequestBody final ActivityCreate inputs) {
         activityManagerService.create(inputs);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<ActivityModel>> getAllActivitiesByUser(){
+    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser(){
         return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.getAllActivitiesByUser());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable Long id){
+    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute @Valid ActivityUpdate inputs) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute @Valid ActivityUpdate inputs) {
         activityManagerService.update(id, inputs);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

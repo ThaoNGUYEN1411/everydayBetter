@@ -3,20 +3,21 @@ package co.simplon.everydaybetterbusiness.services.adapter;
 import co.simplon.everydaybetterbusiness.config.JwtProvider;
 import co.simplon.everydaybetterbusiness.dtos.UserAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.UserCreate;
-import co.simplon.everydaybetterbusiness.models.AuthInfo;
 import co.simplon.everydaybetterbusiness.entities.Role;
 import co.simplon.everydaybetterbusiness.entities.User;
+import co.simplon.everydaybetterbusiness.models.AuthInfo;
 import co.simplon.everydaybetterbusiness.repositories.RoleRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
 import co.simplon.everydaybetterbusiness.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -63,14 +64,13 @@ public class UserServiceAdapter implements UserService {
 
         String token = jwtProvider.create(email, roles);
         System.out.println(token);
-        // Set the HTTP-only cookie
+        // HTTP-only cookie
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true); // Use secure cookies (only over HTTPS)
+        cookie.setSecure(false); // Use secure cookies (only over HTTPS)
         cookie.setPath("/");
         //cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
         response.addCookie(cookie);
-
         return new AuthInfo(user.getNickname(), roles);
     }
 
@@ -80,15 +80,13 @@ public class UserServiceAdapter implements UserService {
     }
 
     @Override
-    public Map<String, Object> logout(HttpServletResponse response){
+    public void logout(HttpServletResponse response){
         Cookie cookie = new Cookie("jwt", "");
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setSecure(false); //false: testing on HTTP => when deployment it's true
         cookie.setPath("/");
         cookie.setMaxAge(0); // Expire immediately
         response.addCookie(cookie);
-
-        return Map.of("message", "Logged out successfully");
     }
 
     @Override
@@ -97,6 +95,7 @@ public class UserServiceAdapter implements UserService {
     }
 }
 /*
-Why do we need to add a new cookie instead of updating it in logout?
+Why do we need to add a new cookie instead of updating it in log out?
 Cookies are managed by the browser, and once set, they cannot be directly updated or removed from the server. Instead, we can only instruct the browser to overwrite the existing cookie by sending a new cookie with the same name (jwt) but an empty value and an immediate expiration.
- */
+
+*/
