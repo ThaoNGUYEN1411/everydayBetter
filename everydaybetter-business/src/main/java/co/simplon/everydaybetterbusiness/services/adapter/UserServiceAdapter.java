@@ -5,18 +5,18 @@ import co.simplon.everydaybetterbusiness.dtos.UserAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.UserCreate;
 import co.simplon.everydaybetterbusiness.entities.Role;
 import co.simplon.everydaybetterbusiness.entities.User;
+import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import co.simplon.everydaybetterbusiness.models.AuthInfo;
 import co.simplon.everydaybetterbusiness.repositories.RoleRepository;
 import co.simplon.everydaybetterbusiness.repositories.UserRepository;
 import co.simplon.everydaybetterbusiness.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -36,18 +36,20 @@ public class UserServiceAdapter implements UserService {
     }
 
     @Override
-    public void create(UserCreate inputs) {
-        String nickname = inputs.nickname();
-        String password = passwordEncoder.encode(inputs.password());
-        String email = inputs.email();
-//todo: verify with 401 nickname
-        Set<Role> roleDefaultValue = roleRepository.findByRoleDefaultTrue()
-                .orElseThrow(() -> new BadCredentialsException(nickname));
-
-        User entity = new User(nickname, email, password, roleDefaultValue);
-        userRepository.save(entity);
+    public void create(final UserCreate inputs) {
+        final var nickname = inputs.nickname();
+        var password = passwordEncoder.encode(inputs.password());
+        final var email = inputs.email();
+        Set<Role> defaultRoles = roleRepository.findByRoleDefaultTrue().orElse(Collections.emptySet());
+        if (!defaultRoles.isEmpty()) {
+            User entity = new User(nickname, email, password, defaultRoles);
+            userRepository.save(entity);
+        }else {
+            throw new ResourceNotFoundException("Find role default not found!");
+        }
     }
 
+//ResouceNotFound and afficher correct front
     @Override
     public AuthInfo authenticate(UserAuthenticate inputs, HttpServletResponse response) {
         String email = inputs.email();

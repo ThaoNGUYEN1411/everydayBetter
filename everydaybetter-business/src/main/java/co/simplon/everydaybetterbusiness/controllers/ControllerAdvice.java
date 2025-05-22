@@ -2,6 +2,7 @@ package co.simplon.everydaybetterbusiness.controllers;
 
 import co.simplon.everydaybetterbusiness.dtos.ApiErrorResponse;
 import co.simplon.everydaybetterbusiness.dtos.ErrorDto;
+import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
@@ -79,8 +80,13 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
     }
 
-//    @ExceptionHandler(ConfigDataResourceNotFoundException.class)
-//    protected ResponseEntity<ErrorDto> handleResourceNotFound(ResourceNotFoundException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    protected ResponseEntity<ErrorDto> handleResourceNotFoundException(final ResourceNotFoundException exception) {
 //        return ResponseEntity<>("Resource not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
-//    }
+        System.out.println(exception);
+        System.out.println("ex here to hanlde");
+        final var message = exception.getMessage();
+        final var errorDetail = new ErrorDto(message);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetail);
+    }
 }
