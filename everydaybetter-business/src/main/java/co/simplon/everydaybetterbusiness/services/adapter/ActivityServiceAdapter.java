@@ -23,7 +23,8 @@ public class ActivityServiceAdapter implements ActivityService {
 
     @Override
     public List<Activity> findByUserId(final Long id) {
-        return activityRepository.findByUserId(id).orElseThrow(()-> new ServiceException("Activity not found with id"+id));
+        return activityRepository.findByUserId(id);
+        //no need new ServiceException("Activity not found with id"+id) juste return empty list
     }
 //TODO hanlde ex!!!!!!!!
     @Override
@@ -38,6 +39,11 @@ public class ActivityServiceAdapter implements ActivityService {
     @Override
     public void delete(final Long id){
         activityRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Activity> findAllActivitiesByUserEmail(final String email) {
+        return activityRepository.findAllActivitiesByUserEmail(email);
     }
 }
 

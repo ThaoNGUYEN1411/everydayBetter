@@ -13,4 +13,6 @@ public interface ActivityService {
     Activity findById(Long id);
 
     void delete(Long id);
+
+    List<Activity> findAllActivitiesByUserEmail(String email);
 }

@@ -94,6 +94,10 @@ public class Config {
                 )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/activities", "/activities/**").permitAll()
                 )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/tracking-record/**").permitAll()
+                )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-record/create").hasRole("USER")
+                )
 
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
@@ -107,3 +111,4 @@ public class Config {
 }
 
 //.oauth2ResourceServer(srv -> srv.jwt(Customizer.withDefaults())) => use par defaul dans JWT dans l’en-tête Authorization: Bearer
+//change to hasRole

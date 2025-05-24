@@ -4,18 +4,23 @@ import co.simplon.everydaybetterbusiness.dtos.TrackingRecordDto;
 import co.simplon.everydaybetterbusiness.entities.Activity;
 import co.simplon.everydaybetterbusiness.entities.TrackingRecord;
 import co.simplon.everydaybetterbusiness.mappers.TrackingRecordMapper;
+import co.simplon.everydaybetterbusiness.models.ActivityTrackingRecordModel;
 import co.simplon.everydaybetterbusiness.models.TrackingRecordModel;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
-import co.simplon.everydaybetterbusiness.services.TrackingRecordForUserActivityService;
 import co.simplon.everydaybetterbusiness.services.TrackingRecordService;
+import co.simplon.everydaybetterbusiness.services.UserActivityTrackingRecordService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
 @Service
-public class TrackingRecordForUserActivityServiceAdapter implements TrackingRecordForUserActivityService {
+public class UserActivityTrackingRecordServiceAdapter implements UserActivityTrackingRecordService {
     private final TrackingRecordService trackingRecordService;
     private final ActivityService activityService;
 
-    public TrackingRecordForUserActivityServiceAdapter(TrackingRecordService trackingRecordService, ActivityService activityService) {
+    public UserActivityTrackingRecordServiceAdapter(TrackingRecordService trackingRecordService, ActivityService activityService) {
         this.trackingRecordService = trackingRecordService;
         this.activityService = activityService;
     }
@@ -29,9 +34,19 @@ public class TrackingRecordForUserActivityServiceAdapter implements TrackingReco
         entity.setTrackedDate(inputs.trackedDate());
         entity.setDone(inputs.done());
         // Vérifier l'existence de l’utilisateur et de l’activité
-
-
         //import toModel avec nom de class car on utiliser method static
         return TrackingRecordMapper.toModel(trackingRecordService.save(entity));
+    }
+
+    @Override
+    public List<ActivityTrackingRecordModel> getTrackingActivityByDay(final LocalDate startDate, final LocalDate endDate, final String email) {
+        return activityService.findAllActivitiesByUserEmail(email)
+                .stream()
+                .map(activity -> new ActivityTrackingRecordModel(activity.getId(), activity.getName(), getTrackingByDayList(activity.getId(), startDate, endDate)))
+                .toList();
+    }
+
+    private List<Map<LocalDate, Boolean>> getTrackingByDayList(final Long activityId, final LocalDate startDate, final  LocalDate endDate ) {
+        return trackingRecordService.findTrackingByDayList(activityId, startDate, endDate);
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public class UserServiceAdapter implements UserService {
         final var nickname = inputs.nickname();
         var password = passwordEncoder.encode(inputs.password());
         final var email = inputs.email();
-        Set<Role> defaultRoles = roleRepository.findByRoleDefaultTrue().orElse(Collections.emptySet());
+        Set<Role> defaultRoles = roleRepository.findByRoleDefaultTrue();
         if (!defaultRoles.isEmpty()) {
             User entity = new User(nickname, email, password, defaultRoles);
             userRepository.save(entity);
@@ -53,7 +52,7 @@ public class UserServiceAdapter implements UserService {
     @Override
     public AuthInfo authenticate(UserAuthenticate inputs, HttpServletResponse response) {
         String email = inputs.email();
-        User user = userRepository.findByEmailIgnoreCase(email)
+        final User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
 
         List<String> roles = user.getRoles().stream().map(Role::getName).toList();

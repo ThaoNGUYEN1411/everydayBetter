@@ -1,7 +1,6 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
 import co.simplon.everydaybetterbusiness.common.AppUtils;
-import co.simplon.everydaybetterbusiness.config.JwtHelper;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
@@ -25,14 +24,12 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     private final ActivityService activityService;
     private final UserService userService;
     private final CategoryService categoryService;
-    private final JwtHelper jwtHelper;
     private final AppUtils utils;
 
-    public ActivityManagerServiceAdapter(ActivityService activityService, UserService userService, CategoryService categoryService, JwtHelper jwtHelper, AppUtils utils) {
+    public ActivityManagerServiceAdapter(ActivityService activityService, UserService userService, CategoryService categoryService, AppUtils utils) {
         this.activityService = activityService;
         this.userService = userService;
         this.categoryService = categoryService;
-        this.jwtHelper = jwtHelper;
         this.utils = utils;
     }
 
@@ -44,7 +41,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
         entity.setPositive(inputs.positive());
 
 //        final String email = jwtHelper.getSubject();
-        final String email = utils.getAuthenticatedUser();
+        final String email = AppUtils.getAuthenticatedUser();
         final User user = userService.findByEmailIgnoreCase(email);
         entity.setUser(user);
 
@@ -57,7 +54,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
 
     @Override
     public List<ActivityModel> getAllActivitiesByUser() {
-        final String email = utils.getAuthenticatedUser();
+        final String email = AppUtils.getAuthenticatedUser();
         final User user = userService.findByEmailIgnoreCase(email);
 
         List<Activity> activities = activityService.findByUserId(user.getId());
@@ -67,7 +64,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     @Override
     public ActivityDetailModel findById(Long id) {
         Activity entity = activityService.findById(id);
-        final String email = utils.getAuthenticatedUser();
+        final String email = AppUtils.getAuthenticatedUser();
         if (!entity.getUser().getEmail().equals(email)){
             throw new BadCredentialsException(email);
         }
@@ -80,7 +77,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     public void update(Long id, ActivityUpdate inputs) {
         Activity entity = activityService.findById(id);
 
-        final String email = utils.getAuthenticatedUser();
+        final String email = AppUtils.getAuthenticatedUser();
         final User user = userService.findByEmailIgnoreCase(email);
         if (Objects.equals(user.getId(), entity.getUser().getId())){
             entity.setName(inputs.name());
