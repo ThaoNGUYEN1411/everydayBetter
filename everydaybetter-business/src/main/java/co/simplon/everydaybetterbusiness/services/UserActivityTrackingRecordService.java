@@ -1,14 +1,18 @@
 package co.simplon.everydaybetterbusiness.services;
 
-import co.simplon.everydaybetterbusiness.dtos.TrackingRecordDto;
+import co.simplon.everydaybetterbusiness.dtos.TrackingRecordCreate;
+import co.simplon.everydaybetterbusiness.dtos.TrackingRecordUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingRecordModel;
 import co.simplon.everydaybetterbusiness.models.TrackingRecordModel;
+import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface UserActivityTrackingRecordService {
-    TrackingRecordModel saveTrackingRecordForUserActivity(TrackingRecordDto inputs, String email);
+    TrackingRecordModel saveTrackingRecordForUserActivity(TrackingRecordCreate inputs, String email);
 
     List<ActivityTrackingRecordModel> getTrackingActivityByDay(LocalDate startDate, LocalDate endDate, String email);
+
+    void updateTrackingActivity(@Valid TrackingRecordUpdate inputs);
 }

@@ -17,18 +17,14 @@ public abstract class AbstractEntity {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     protected AbstractEntity() {
         //
     }
 
-//    @SuppressWarnings("unused")
-//    private void setId(long id) {
-//        this.id = id;
-//    }
+    @SuppressWarnings("unused")
+    private void setId(long id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {

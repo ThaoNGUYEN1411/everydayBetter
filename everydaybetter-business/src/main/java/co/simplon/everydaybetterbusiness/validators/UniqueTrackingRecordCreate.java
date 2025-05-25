@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueTrackingRecordDtoValidator.class)
-public @interface UniqueTrackingRecordDto {
+@Constraint(validatedBy = UniqueTrackingRecordCreateValidator.class)
+public @interface UniqueTrackingRecordCreate {
     String message() default "TrackingRecord for this date existed";
 
     Class<?> [] groups() default {};

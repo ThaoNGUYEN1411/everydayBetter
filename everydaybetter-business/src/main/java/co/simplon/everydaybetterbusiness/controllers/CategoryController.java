@@ -27,6 +27,5 @@ public class CategoryController {
     public ResponseEntity<List<CategoryModel>> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
     }
-
 }
 //@SecurityRequirement(name = "bearerAuth"): une annotation utilisée avec Swagger/OpenAPI,  l’utilisateur doit être authentifié

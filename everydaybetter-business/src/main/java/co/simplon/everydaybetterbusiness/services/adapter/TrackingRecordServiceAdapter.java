@@ -6,7 +6,7 @@ import co.simplon.everydaybetterbusiness.services.TrackingRecordService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -23,8 +23,9 @@ public class TrackingRecordServiceAdapter implements TrackingRecordService {
     }
 
     @Override
-    public List<Map<LocalDate, Boolean>> findTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate ) {
-        return repository.findAllByActivityId(activityId, startDate, endDate).stream()
-                .map(trackingDto -> Map.of(trackingDto.getTrackedDate(), trackingDto.getDone())).toList();
+    public Map<LocalDate, Boolean> findTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate ) {
+        Map<LocalDate, Boolean> trackingByDay = new HashMap<>();
+        repository.findAllByActivityId(activityId, startDate, endDate).forEach(trackingDto -> trackingByDay.put(trackingDto.getTrackedDate(), trackingDto.getDone()));
+        return trackingByDay;
     }
 }

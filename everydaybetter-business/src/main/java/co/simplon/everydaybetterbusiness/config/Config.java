@@ -96,7 +96,7 @@ public class Config {
                 )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/tracking-record/**").permitAll()
                 )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-record/create").hasRole("USER")
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-record/create").permitAll()
                 )
 
                 // Always last rule:

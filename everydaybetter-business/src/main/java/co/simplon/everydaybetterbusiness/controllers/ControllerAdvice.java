@@ -82,9 +82,6 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     protected ResponseEntity<ErrorDto> handleResourceNotFoundException(final ResourceNotFoundException exception) {
-//        return ResponseEntity<>("Resource not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
-        System.out.println(exception);
-        System.out.println("ex here to hanlde");
         final var message = exception.getMessage();
         final var errorDetail = new ErrorDto(message);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetail);

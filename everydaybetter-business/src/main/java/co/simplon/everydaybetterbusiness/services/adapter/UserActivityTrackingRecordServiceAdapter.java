@@ -1,6 +1,7 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
-import co.simplon.everydaybetterbusiness.dtos.TrackingRecordDto;
+import co.simplon.everydaybetterbusiness.dtos.TrackingRecordCreate;
+import co.simplon.everydaybetterbusiness.dtos.TrackingRecordUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
 import co.simplon.everydaybetterbusiness.entities.TrackingRecord;
 import co.simplon.everydaybetterbusiness.mappers.TrackingRecordMapper;
@@ -26,7 +27,7 @@ public class UserActivityTrackingRecordServiceAdapter implements UserActivityTra
     }
 
     @Override
-    public TrackingRecordModel saveTrackingRecordForUserActivity(final TrackingRecordDto inputs, final String email){
+    public TrackingRecordModel saveTrackingRecordForUserActivity(final TrackingRecordCreate inputs, final String email){
         final TrackingRecord entity = new TrackingRecord();
         Activity activity = activityService.findById(Long.valueOf(inputs.activityId()));
 
@@ -46,7 +47,12 @@ public class UserActivityTrackingRecordServiceAdapter implements UserActivityTra
                 .toList();
     }
 
-    private List<Map<LocalDate, Boolean>> getTrackingByDayList(final Long activityId, final LocalDate startDate, final  LocalDate endDate ) {
+    @Override
+    public void updateTrackingActivity(TrackingRecordUpdate inputs) {
+        trackingRecordService.findTrackingRecordByActivityIdAndTrackedDate(inputs.activityId(), inputs.trackedDate());
+    }
+
+    private Map<LocalDate, Boolean> getTrackingByDayList(final Long activityId, final LocalDate startDate, final  LocalDate endDate ) {
         return trackingRecordService.findTrackingByDayList(activityId, startDate, endDate);
     }
 }

@@ -13,13 +13,6 @@ public class Category extends AbstractEntity {
     @Column(name = "category_name")
     private String name;
 
-//    @ManyToMany
-//    @JoinTable(name = "t_activities_categories",
-//            joinColumns = @JoinColumn(name = "category_id"),
-//            inverseJoinColumns = @JoinColumn(name = "activity_id")
-//        )
-//    private ActivityEntity activities;
-
     public Category() {
         //Default for ORM
     }
@@ -28,17 +21,9 @@ public class Category extends AbstractEntity {
         return name;
     }
 
-//    public ActivityEntity getActivities() {
-//        return activities;
-//    }
-
     public void setName(String name) {
         this.name = name;
     }
-
-//    public void setActivities(ActivityEntity activities) {
-//        this.activities = activities;
-//    }
 
     @Override
     public boolean equals(Object o) {

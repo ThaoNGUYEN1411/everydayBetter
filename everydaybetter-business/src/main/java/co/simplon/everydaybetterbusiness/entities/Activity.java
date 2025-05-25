@@ -22,12 +22,6 @@ public class Activity extends AbstractEntity {
     @Column(name = "is_positive", nullable = false, columnDefinition = "boolean default true")
     private Boolean positive;
 
-//    @ManyToMany
-//    @JoinTable(name = "t_activities_categories",
-//            joinColumns = @JoinColumn(name = "activity_id"),
-//            inverseJoinColumns = @JoinColumn(name = "category_id"))
-//    private Set<Category> categories;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable=false)
     private Category category;
