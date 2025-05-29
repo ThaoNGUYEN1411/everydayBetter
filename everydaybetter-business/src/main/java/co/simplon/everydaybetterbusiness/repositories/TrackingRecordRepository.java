@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TrackingRecordRepository extends JpaRepository<TrackingRecord, Long> {
@@ -31,5 +33,19 @@ public interface TrackingRecordRepository extends JpaRepository<TrackingRecord, 
             order by t.trackedDate
             """)
     List<TrackingView> findAllByActivityId(@Param(value = "activityId") Long activityId, @Param(value = "startDate")LocalDate startDate,@Param(value = "endDate") LocalDate endDate);
-    //todo: it's better to return dto or a interface view
+
+    @Transactional
+    @Query(value = """
+            select t from TrackingRecord t
+            where t.trackedDate = :trackedDate
+            and t.activity.id = :activityId
+            """)
+    Optional<TrackingRecord> findByTrackedDayAndActivityId(@Param(value = "trackedDate") LocalDate trackedDate, @Param(value = "activityId") String activityId);
+
+//    @Transactional
+//    @Query(value = """
+//           DELETE FROM t_tracking_record
+//           WHERE tracked_date =
+//           AND activity_id = '29';""", nativeQuery = true)
+//    void dele(@Param(value = "trackedDate") LocalDate trackedDate, @Param(value = "activityId") String activityId);
 }

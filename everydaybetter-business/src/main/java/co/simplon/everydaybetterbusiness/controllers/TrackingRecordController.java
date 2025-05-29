@@ -2,15 +2,18 @@ package co.simplon.everydaybetterbusiness.controllers;
 
 import co.simplon.everydaybetterbusiness.common.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.TrackingRecordCreate;
+import co.simplon.everydaybetterbusiness.dtos.TrackingRecordDelete;
 import co.simplon.everydaybetterbusiness.dtos.TrackingRecordUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingRecordModel;
 import co.simplon.everydaybetterbusiness.models.TrackingRecordModel;
+import co.simplon.everydaybetterbusiness.services.TrackingRecordService;
 import co.simplon.everydaybetterbusiness.services.UserActivityTrackingRecordService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,9 +30,11 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 public class TrackingRecordController {
     private final UserActivityTrackingRecordService service;
+    private final TrackingRecordService trackingRecordService;
 
-    public TrackingRecordController(UserActivityTrackingRecordService service) {
+    public TrackingRecordController(UserActivityTrackingRecordService service, TrackingRecordService trackingRecordService) {
         this.service = service;
+        this.trackingRecordService = trackingRecordService;
     }
 
     //choix between return void or an object TrackingRecordDto => update direct state, it's better to return an object
@@ -45,7 +50,13 @@ public class TrackingRecordController {
 
     @PatchMapping(value = "/update")
     public ResponseEntity<Void> updateTrackingActivity(@RequestBody @Valid final TrackingRecordUpdate inputs){
-        service.updateTrackingActivity(inputs);
+        trackingRecordService.updateTrackingActivity(inputs);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping(value = "/")
+    public ResponseEntity<Void> deleteTrackingActivity(@RequestBody @Valid final TrackingRecordDelete trackingRecordDelete){
+        trackingRecordService.deleteTrackingActivity(trackingRecordDelete);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

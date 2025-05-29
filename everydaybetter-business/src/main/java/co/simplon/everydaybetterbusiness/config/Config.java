@@ -96,6 +96,8 @@ public class Config {
                 )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/tracking-record/**").permitAll()
                 )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.DELETE, "/tracking-record/**").permitAll()
+                )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-record/create").permitAll()
                 )
 
