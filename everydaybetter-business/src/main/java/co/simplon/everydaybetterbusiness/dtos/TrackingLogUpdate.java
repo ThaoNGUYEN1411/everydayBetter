@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record TrackingRecordUpdate(@NotBlank String activityId, @NotNull LocalDate trackedDate, @NotNull Boolean done) {
+public record TrackingLogUpdate(@NotBlank String activityId, @NotNull LocalDate trackedDate, @NotNull Boolean done) {
 }

@@ -43,6 +43,3 @@ public class Category extends AbstractEntity {
                 '}';
     }
 }
-//note: use @Column(name = "label_id") to map id with lable_id in db => correct db in DBeaver not use label_id, use id
-// - private setId because handle by db, need to add suppressWarning
-//if necessary to @manytomany

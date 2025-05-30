@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "t_tracking_record")
-public class TrackingRecord extends AbstractEntity {
+@Table(name = "t_tracking_logs")
+public class TrackingLog extends AbstractEntity {
 
     @Column(name = "tracked_date")
     private LocalDate trackedDate;
@@ -23,7 +23,7 @@ public class TrackingRecord extends AbstractEntity {
     @JoinColumn(name = "activity_id", nullable = false) //name column in this table
     private Activity activity;
 
-    public TrackingRecord(){
+    public TrackingLog(){
         //ORM
     }
 
@@ -53,7 +53,7 @@ public class TrackingRecord extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "TrackingRecord{" +
+        return "TrackingLog{" +
                 "trackedDate=" + trackedDate +
                 ", done=" + done +
                 ", activity=" + activity +
@@ -63,7 +63,7 @@ public class TrackingRecord extends AbstractEntity {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        return object instanceof TrackingRecord other && activity.equals(other.activity) && trackedDate.equals(other.trackedDate);
+        return object instanceof TrackingLog other && activity.equals(other.activity) && trackedDate.equals(other.trackedDate);
     }
 
     //todo: review

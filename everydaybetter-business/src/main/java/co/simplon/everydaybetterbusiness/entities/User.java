@@ -69,7 +69,6 @@ public class User extends AbstractEntity {
         this.password = password;
     }
 
-
     @Override
     public String toString() {
         return "User{" +
@@ -91,8 +90,7 @@ public class User extends AbstractEntity {
         return Objects.hash(super.hashCode(), email);
     }
 }
-// note: private SetId handle by db
 // recover toString for not sprint password
-// constructer empty for create object default for ORM
+// constructor empty for create object default for ORM
 //@Column add nullable = false, updatable = false
 //learn: why need to use new HashSet<>(roles);?

@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record TrackingRecordDelete(@NotBlank String activityId, @NotNull LocalDate trackedDate) {
+public record TrackingLogDelete(@NotBlank String activityId, @NotNull LocalDate trackedDate) {
 }
