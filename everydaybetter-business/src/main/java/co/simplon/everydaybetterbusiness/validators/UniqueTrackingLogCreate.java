@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueTrackingRecordCreateValidator.class)
-public @interface UniqueTrackingRecordCreate {
-    String message() default "TrackingRecord for this date existed";
+@Constraint(validatedBy = UniqueTrackingLogCreateValidator.class)
+public @interface UniqueTrackingLogCreate {
+    String message() default "TrackingLog for this date existed";
 
     Class<?> [] groups() default {};
 

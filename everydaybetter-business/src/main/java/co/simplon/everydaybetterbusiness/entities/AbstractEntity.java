@@ -44,3 +44,4 @@ public abstract class AbstractEntity {
                 '}';
     }
 }
+// - private setId because handle by postgres, need to add suppressWarning
