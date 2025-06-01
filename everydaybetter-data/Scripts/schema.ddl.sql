@@ -37,21 +37,13 @@ CREATE TABLE t_activities(
 
 CREATE TABLE t_tracking_logs(
 	id INT GENERATED ALWAYS AS IDENTITY,
-	tracked_day timestamp NOT NULL,
-	is_pratice boolean NOT NULL,
+	tracked_date timestamp NOT NULL,
+	done boolean NOT NULL,
 	activity_id INT NOT NULL,
 	CONSTRAINT t_tracking_logs_pkey PRIMARY KEY(id),
-	CONSTRAINT t_tracking_logs_tracked_day_activity_id_ukey UNIQUE (tracked_day, activity_id),
+	CONSTRAINT t_tracking_logs_tracked_date_activity_id_ukey UNIQUE (tracked_date, activity_id),
 	CONSTRAINT t_tracking_logs_activities_fkey FOREIGN KEY (activity_id) REFERENCES t_activities (id)
 );
-
---CREATE TABLE t_activities_categories(
---	activity_id INT NOT NULL,
---	category_id INT NOT NULL,
---	CONSTRAINT t_activities_categories_activities_fkey FOREIGN KEY (activity_id) REFERENCES t_activities (id),
---	CONSTRAINT t_activities_categories_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id),
---	CONSTRAINT t_activities_categories_ukey UNIQUE (activity_id, category_id)
---);
 
 CREATE TABLE t_roles(
 	id INT GENERATED ALWAYS AS IDENTITY,
@@ -70,3 +62,5 @@ CREATE TABLE t_users_roles(
 	CONSTRAINT t_users_roles_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
 	CONSTRAINT t_users_roles_roles_fkey FOREIGN KEY (role_id) REFERENCES t_roles(id)
 );
+
+SELECT * FROM t_activities;
