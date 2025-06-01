@@ -5,7 +5,7 @@ import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
 import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import co.simplon.everydaybetterbusiness.services.ActivityManagerService;
-import co.simplon.everydaybetterbusiness.services.ActivityService;
+import co.simplon.everydaybetterbusiness.services.UserActivityTrackingLogService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,12 +26,12 @@ import java.util.List;
 @RequestMapping("/activities")
 @SecurityRequirement(name = "bearerAuth")
 public class ActivityController {
-    private final ActivityService service;
     private final ActivityManagerService activityManagerService;
+    private final UserActivityTrackingLogService userActivityTrackingLogService;
 
-    public ActivityController(ActivityService service, ActivityManagerService activityManagerService) {
-        this.service = service;
+    public ActivityController(ActivityManagerService activityManagerService, UserActivityTrackingLogService userActivityTrackingLogService) {
         this.activityManagerService = activityManagerService;
+        this.userActivityTrackingLogService = userActivityTrackingLogService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -47,19 +46,20 @@ public class ActivityController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable Long id){
+    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable final Long id){
         return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        service.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable("id") final Long id) {
+        userActivityTrackingLogService.deleteActivityById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute @Valid ActivityUpdate inputs) {
+    public ResponseEntity<Void> update(@PathVariable("id") final Long id, @RequestBody @Valid final ActivityUpdate inputs) {
         activityManagerService.update(id, inputs);
+        System.out.println(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

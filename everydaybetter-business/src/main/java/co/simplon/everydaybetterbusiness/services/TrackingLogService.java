@@ -15,4 +15,6 @@ public interface TrackingLogService {
     void updateTrackingActivity(TrackingLogUpdate trackingLogUpdate);
 
     void deleteById(Long id);
+
+    void deleteAllByActivityId(Long id);
 }
