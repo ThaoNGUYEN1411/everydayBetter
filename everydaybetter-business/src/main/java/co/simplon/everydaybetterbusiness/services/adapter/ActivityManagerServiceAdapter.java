@@ -24,13 +24,11 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     private final ActivityService activityService;
     private final UserService userService;
     private final CategoryService categoryService;
-    private final AppUtils utils;
 
-    public ActivityManagerServiceAdapter(ActivityService activityService, UserService userService, CategoryService categoryService, AppUtils utils) {
+    public ActivityManagerServiceAdapter(ActivityService activityService, UserService userService, CategoryService categoryService) {
         this.activityService = activityService;
         this.userService = userService;
         this.categoryService = categoryService;
-        this.utils = utils;
     }
 
     @Override
@@ -39,8 +37,6 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
         entity.setName(inputs.name());
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
-
-//        final String email = jwtHelper.getSubject();
         final String email = AppUtils.getAuthenticatedUser();
         final User user = userService.findByEmailIgnoreCase(email);
         entity.setUser(user);
@@ -87,8 +83,9 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
             Category category = categoryService.findById(categoryId);
             entity.setCategory(category);
             activityService.save(entity);
+            System.out.println("save");
+
         }else {
-            //System.out.println("user cannot modify this activity");
             //todo Thao: replace by handleEx 403
             throw new BadCredentialsException(email);
         }

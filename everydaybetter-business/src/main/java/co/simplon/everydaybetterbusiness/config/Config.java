@@ -48,7 +48,7 @@ public class Config {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("POST", "GET", "PUT",  "DELETE").allowedOrigins(origins).allowCredentials(true);
+                registry.addMapping("/**").allowedMethods("POST", "GET", "PUT",  "DELETE", "PATCH").allowedOrigins(origins).allowCredentials(true);
             }
         };
     }
@@ -94,11 +94,17 @@ public class Config {
                 )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/activities", "/activities/**").permitAll()
                 )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.PUT, "/activities", "/activities/**").permitAll()
+                )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.DELETE, "/activities", "/activities/**").permitAll()
+                )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/tracking-logs/**").permitAll()
                 )
                 .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.DELETE, "/tracking-logs/**").permitAll()
                 )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-logs/create").permitAll()
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-logs/").permitAll()
+                )
+                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.PATCH, "/tracking-logs/update").permitAll()
                 )
 
                 // Always last rule:

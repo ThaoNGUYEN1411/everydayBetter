@@ -46,12 +46,16 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
                 .toList();
     }
 
-//    @Override
-//    public void updateTrackingActivity(final TrackingRecordUpdate inputs) {
-//        trackingRecordService.findTrackingRecordByActivityIdAndTrackedDate(inputs);
-//    }
+    @Override
+    public void deleteActivityById(final Long id) {
+        //verify user token and user activity
+        trackingLogService.deleteAllByActivityId(id);
+        activityService.delete(id);
+    }
 
     private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final  LocalDate endDate ) {
         return trackingLogService.findAllTrackingLogByActivityIdAndPeriodTime(activityId, startDate, endDate);
     }
+
+
 }

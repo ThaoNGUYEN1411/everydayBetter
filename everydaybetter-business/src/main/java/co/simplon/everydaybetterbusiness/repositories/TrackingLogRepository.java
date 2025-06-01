@@ -43,10 +43,11 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             """)
     Optional<TrackingLog> findByTrackedDayAndActivityId(@Param(value = "trackedDate") LocalDate trackedDate, @Param(value = "activityId") String activityId);
 
-//    @Transactional
-//    @Query(value = """
-//           DELETE FROM t_tracking_record
-//           WHERE tracked_date =
-//           AND activity_id = '29';""", nativeQuery = true)
-//    void dele(@Param(value = "trackedDate") LocalDate trackedDate, @Param(value = "activityId") String activityId);
+    @Transactional
+    @Query(value = """
+            delete from TrackingLog t
+            where t.activity.id = :activityId
+            """)
+    void deleteAllByActivityId(@Param(value = "activityId") Long activityId);
+
 }

@@ -11,4 +11,6 @@ public interface UserActivityTrackingLogService {
     TrackingLogModel saveTrackingLogForUserActivity(TrackingLogCreate inputs, String email);
 
     List<ActivityTrackingLogModel> getTrackingActivityByDay(LocalDate startDate, LocalDate endDate, String email);
+
+    void deleteActivityById(Long id);
 }

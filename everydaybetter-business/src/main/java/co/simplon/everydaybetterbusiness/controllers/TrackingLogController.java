@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tracking-log")
+@RequestMapping("/tracking-logs")
 @SecurityRequirement(name = "bearerAuth")
 public class TrackingLogController {
     private final UserActivityTrackingLogService userActivityTrackingLogService;
@@ -37,14 +37,14 @@ public class TrackingLogController {
         this.trackingLogService = trackingLogService;
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrackingLogModel> saveUserActivityLog(@RequestBody @Valid final TrackingLogCreate inputs){
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrackingLogModel> createTrackingLog(@RequestBody @Valid final TrackingLogCreate inputs){
         return ResponseEntity.status(HttpStatus.CREATED).body(userActivityTrackingLogService.saveTrackingLogForUserActivity(inputs, AppUtils.getAuthenticatedUser()));
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get all activities with tracking log", description = "Get all activities with tracking log by date")
-    public ResponseEntity<List<ActivityTrackingLogModel>> getTrackingActivityByDay(@RequestParam(name = "start-date") LocalDate startDate, @RequestParam(name = "end-date") LocalDate endDate){
+    public ResponseEntity<List<ActivityTrackingLogModel>> getAllActivityTrackingLog(@RequestParam(name = "start-date") LocalDate startDate, @RequestParam(name = "end-date") LocalDate endDate){
         return ResponseEntity.status(HttpStatus.OK).body(userActivityTrackingLogService.getTrackingActivityByDay(startDate, endDate, AppUtils.getAuthenticatedUser()));
     }
 
