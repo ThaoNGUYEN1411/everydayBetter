@@ -42,5 +42,3 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
-
-//Note: in the project entreprise, controller have "public" methode
