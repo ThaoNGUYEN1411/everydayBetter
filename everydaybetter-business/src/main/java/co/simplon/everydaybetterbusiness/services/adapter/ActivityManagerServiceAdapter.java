@@ -86,7 +86,6 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
             System.out.println("save");
 
         }else {
-            //todo Thao: replace by handleEx 403
             throw new BadCredentialsException(email);
         }
 

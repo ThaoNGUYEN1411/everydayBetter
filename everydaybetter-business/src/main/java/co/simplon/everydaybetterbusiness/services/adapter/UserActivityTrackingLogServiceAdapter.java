@@ -56,6 +56,4 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final  LocalDate endDate ) {
         return trackingLogService.findAllTrackingLogByActivityIdAndPeriodTime(activityId, startDate, endDate);
     }
-
-
 }

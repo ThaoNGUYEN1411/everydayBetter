@@ -1,10 +1,10 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
 import co.simplon.everydaybetterbusiness.entities.Category;
+import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import co.simplon.everydaybetterbusiness.models.CategoryModel;
 import co.simplon.everydaybetterbusiness.repositories.CategoryRepository;
 import co.simplon.everydaybetterbusiness.services.CategoryService;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +25,8 @@ public class CategoryServiceAdapter implements CategoryService {
         ).toList();
     }
 
-    //todo: handle exception
     @Override
     public Category findById(final Long id) {
-        return repository.findById(id).orElseThrow(() -> new ServiceException("Not found category with id:"+id));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found category with id:"+id));
     }
 }

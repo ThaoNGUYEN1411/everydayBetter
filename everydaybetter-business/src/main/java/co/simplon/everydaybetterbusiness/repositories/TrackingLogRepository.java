@@ -33,7 +33,9 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             and t.trackedDate <= :endDate
             order by t.trackedDate
             """)
-    List<TrackingView> findAllTrackingLogByActivityIdAndPeriodTime(@Param(value = "activityId") Long activityId, @Param(value = "startDate")LocalDate startDate, @Param(value = "endDate") LocalDate endDate);
+    List<TrackingView> findAllTrackingLogByActivityIdAndPeriodTime(@Param(value = "activityId") Long activityId,
+                                                                   @Param(value = "startDate")LocalDate startDate,
+                                                                   @Param(value = "endDate") LocalDate endDate);
 
     @Transactional
     @Query(value = """

@@ -52,6 +52,4 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     public void deleteAllByActivityId(final Long activityId) {
         repository.deleteAllByActivityId(activityId);
     }
-
-
 }

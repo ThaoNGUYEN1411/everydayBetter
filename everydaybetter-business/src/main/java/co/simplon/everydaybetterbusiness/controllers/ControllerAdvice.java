@@ -65,7 +65,6 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiErrorResponse);
     }
 
-//toto: explain detail
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<ErrorDto> handleConstraintViolationException(final ConstraintViolationException exception){
     final Map<String, String> errors = new HashMap<>();
@@ -77,11 +76,4 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     final var errorDetails = new ErrorDto(StringUtils.join(errors));
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
     }
-
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    protected ResponseEntity<ErrorDto> handleResourceNotFoundException(final ResourceNotFoundException exception) {
-//        final var message = exception.getMessage();
-//        final var errorDetail = new ErrorDto(message);
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetail);
-//    }
 }
