@@ -59,11 +59,8 @@ public class ActivityController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") final Long id, @RequestBody @Valid final ActivityUpdate inputs) {
         activityManagerService.update(id, inputs);
-        System.out.println(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
 
-//todo: handle controller advice for unique habit
-//Validation inputs
 //learn more @ModelAttribute

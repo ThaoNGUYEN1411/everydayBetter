@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 @UniqueUserActivity
 public record ActivityCreate(
         @NotBlank @Size(max = 200) String name,
-        @Size(max = 2000) String description, //review constraint 2000
+        @Size(max = 2000) String description,
         @NotNull Boolean positive,
         String categoryId) {
 }

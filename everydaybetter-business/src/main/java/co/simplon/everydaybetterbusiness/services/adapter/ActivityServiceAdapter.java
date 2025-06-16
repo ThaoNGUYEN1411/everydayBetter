@@ -1,9 +1,9 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
 import co.simplon.everydaybetterbusiness.entities.Activity;
+import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,16 +24,11 @@ public class ActivityServiceAdapter implements ActivityService {
     @Override
     public List<Activity> findByUserId(final Long id) {
         return activityRepository.findByUserId(id);
-        //no need new ServiceException("Activity not found with id"+id) juste return empty list
     }
-//TODO hanlde ex!!!!!!!!
+
     @Override
     public Activity findById(Long id) {
-//       return Optional.ofNullable(id).ifPresent(activityRepository::findById).orElseThrow(() -> new RuntimeException("Activity with ID " + id + " not found"));
-        return activityRepository.findById(id).orElseThrow(()->new ServiceException("Activity with ID " + id + " not found")   );
-//        return activityRepository.findById(id).orElseThrow(()->new Exception("Activity with ID " + id + " not found")   );
-
-//        Optional.of(activityRepository::findById)
+        return activityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Activity with ID " + id + " not found")   );
     }
 
     @Override

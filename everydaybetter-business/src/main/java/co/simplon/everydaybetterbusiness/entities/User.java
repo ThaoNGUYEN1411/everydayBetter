@@ -34,7 +34,6 @@ public class User extends AbstractEntity {
     }
 
     public User(String nickname, String email, String password, Set<Role> roles) {
-        //this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
