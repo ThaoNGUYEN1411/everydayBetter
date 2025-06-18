@@ -50,7 +50,7 @@ Load different application settings (e.g., application-test.yml or application-t
 
 Use mocked beans, in-memory databases, or test-specific configurations
 Without it:
-If you don’t use @ActiveProfiles("test"), Spring Boot will load the default profile (application.yml or application.properties), which is often meant for production or development — not ideal for tests.
+If you don’t use @ActiveProfiles("test"), Spring Boot will load the default profile (application.yml or application-template.properties), which is often meant for production or development — not ideal for tests.
 
  This is an abstract class — you can't instantiate it directly.
 Child test classes extend it and implement the getController() method to provide their specific controller to test.

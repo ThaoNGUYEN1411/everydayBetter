@@ -1,7 +1,3 @@
-### Specifical files ###
-**/application-dev.properties
-**/application.properties
-
 .DS_Store
 
 ### Maven / Eclipse files ###
