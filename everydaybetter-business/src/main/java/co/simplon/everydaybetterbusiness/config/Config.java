@@ -82,8 +82,7 @@ public class Config {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/swagger-resources/**",
-                                "/webjars/**"
+                                "/swagger-resources/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
 
