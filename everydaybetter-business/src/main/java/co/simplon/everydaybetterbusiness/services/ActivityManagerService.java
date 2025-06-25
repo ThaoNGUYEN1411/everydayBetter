@@ -8,11 +8,11 @@ import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import java.util.List;
 
 public interface ActivityManagerService {
-    void create(ActivityCreate inputs);
+    void create(ActivityCreate inputs, String email);
 
-    List<ActivityModel> getAllActivitiesByUser();
+    List<ActivityModel> getAllActivitiesByUser(String email);
 
-    ActivityDetailModel findById(Long id);
+    ActivityDetailModel findById(Long id, String email);
 
-    void update(Long id, ActivityUpdate inputs);
+    void update(Long id, ActivityUpdate inputs, String email);
 }

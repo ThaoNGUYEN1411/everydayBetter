@@ -4,6 +4,7 @@ import co.simplon.everydaybetterbusiness.entities.Activity;
 import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
+import co.simplon.everydaybetterbusiness.view.ActivityView;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public void save(Activity entity) {
+    public void save(final Activity entity) {
         activityRepository.save(entity);
     }
 
@@ -27,8 +28,8 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public Activity findById(Long id) {
-        return activityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Activity with ID " + id + " not found")   );
+    public Activity findByIdAndUserEmail(final Long id, final String email) {
+        return activityRepository.findByIdAndUserEmail(id, email).orElseThrow(()->new ResourceNotFoundException("Activity with ID " + id + " not found"));
     }
 
     @Override
@@ -37,8 +38,18 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public List<Activity> findAllActivitiesByUserEmail(final String email) {
+    public List<ActivityView> findAllActivitiesByUserEmail(final String email) {
         return activityRepository.findAllActivitiesByUserEmail(email);
+    }
+
+    @Override
+    public boolean existByActivityIdAndUserEmail(final Long activityId,final String email) {
+        return activityRepository.existByActivityIdAndUserEmail(activityId, email);
+    }
+
+    @Override
+    public Activity findById(Long id) {
+        return activityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Not found activity with id :" +id));
     }
 }
 

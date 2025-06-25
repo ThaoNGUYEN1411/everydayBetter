@@ -1,11 +1,13 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
+import co.simplon.everydaybetterbusiness.common.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
 import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import co.simplon.everydaybetterbusiness.services.ActivityManagerService;
 import co.simplon.everydaybetterbusiness.services.UserActivityTrackingLogService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -35,32 +37,35 @@ public class ActivityController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createActivity(@Valid @RequestBody final ActivityCreate inputs) {
-        activityManagerService.create(inputs);
+    @Operation(summary = "Create an activity", description = "Create an activity for the currently connected user")
+    public ResponseEntity<Void> createActivity(@Valid @RequestBody final ActivityCreate inputs, final String email) {
+        activityManagerService.create(inputs, AppUtils.getAuthenticatedUser());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser(){
-        return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.getAllActivitiesByUser());
+    @Operation(summary = "Get all activities for an user", description = "Get all activities for an user")
+    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser(final String email){
+        return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.getAllActivitiesByUser(AppUtils.getAuthenticatedUser()));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable final Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.findById(id));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") final Long id) {
-        userActivityTrackingLogService.deleteActivityById(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    @Operation(summary = "Get an activity by id", description = "Get an activity by id")
+    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable final Long id, final String email){
+        return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.findById(id, AppUtils.getAuthenticatedUser()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") final Long id, @RequestBody @Valid final ActivityUpdate inputs) {
-        activityManagerService.update(id, inputs);
+    @Operation(summary = "Update an activity by id", description = "Delete an activity by id")
+    public ResponseEntity<Void> update(@PathVariable("id") final Long id, @RequestBody @Valid final ActivityUpdate inputs, final String email) {
+        activityManagerService.update(id, inputs, AppUtils.getAuthenticatedUser());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an activity by id", description = "Delete an activity by id")
+    public ResponseEntity<Void> delete(@PathVariable("id") final Long id, final String email) {
+        userActivityTrackingLogService.deleteActivityById(id, AppUtils.getAuthenticatedUser());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
-
-//learn more @ModelAttribute
