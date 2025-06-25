@@ -16,8 +16,4 @@ public class AppUtils {
         }
         throw new BadCredentialsException("User is not authenticated");
     }
-
-//    public static Long getUserId(){
-//        return Optional.ofNullable(getAuthenticatedUser()).map(String::)
-//    }
 }

@@ -38,27 +38,29 @@ public class TrackingLogController {
     }
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrackingLogModel> createTrackingLog(@RequestBody @Valid final TrackingLogCreate inputs){
+    @Operation(summary = "Add tracking of activity by date", description = "Add tracking of activity by date")
+    public ResponseEntity<TrackingLogModel> createTrackingLog(@RequestBody @Valid final TrackingLogCreate inputs, final String email){
         return ResponseEntity.status(HttpStatus.CREATED).body(userActivityTrackingLogService.saveTrackingLogForUserActivity(inputs, AppUtils.getAuthenticatedUser()));
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get all activities with tracking log", description = "Get all activities with tracking log by date")
-    public ResponseEntity<List<ActivityTrackingLogModel>> getAllActivityTrackingLog(@RequestParam(name = "start-date") LocalDate startDate, @RequestParam(name = "end-date") LocalDate endDate){
+    public ResponseEntity<List<ActivityTrackingLogModel>> getAllActivityTrackingLog(@RequestParam(name = "start-date") final LocalDate startDate, @RequestParam(name = "end-date") final LocalDate endDate, final String email){
         return ResponseEntity.status(HttpStatus.OK).body(userActivityTrackingLogService.getTrackingActivityByDay(startDate, endDate, AppUtils.getAuthenticatedUser()));
     }
 
     @PatchMapping(value = "/update")
-    @Operation(summary = "Update a tracking log", description = "update a tracking log according to date and activity ")
-    public ResponseEntity<Void> updateTrackingActivity(@RequestBody @Valid final TrackingLogUpdate trackingLogUpdate){
-        trackingLogService.updateTrackingActivity(trackingLogUpdate);
+    @Operation(summary = "Update a tracking log", description = "update a tracking log according to date and activity")
+    public ResponseEntity<Void> updateTrackingActivity(@RequestBody @Valid final TrackingLogUpdate trackingLogUpdate, final String email){
+        userActivityTrackingLogService.updateTrackingActivity(trackingLogUpdate, AppUtils.getAuthenticatedUser());
+//        trackingLogService.updateTrackingActivity(trackingLogUpdate, AppUtils.getAuthenticatedUser());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/")
-    public ResponseEntity<Void> deleteTrackingActivity(@RequestParam(name = "id") Long id){
+    @Operation(summary = "Delete a tracking log", description = "Delete a tracking log according to date and activity ")
+    public ResponseEntity<Void> deleteTrackingActivity(@RequestParam(name = "id") final Long id){
         trackingLogService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
-//todo: add operation to all controller

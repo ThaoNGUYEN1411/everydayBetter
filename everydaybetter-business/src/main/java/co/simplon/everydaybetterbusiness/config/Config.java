@@ -85,27 +85,6 @@ public class Config {
                                 "/swagger-resources/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
-
-                .authorizeHttpRequests(
-                        req -> req.requestMatchers(HttpMethod.GET, "/users/with-role").hasRole("ADMIN"))
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/categories").permitAll())
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/activities", "/activities/**", "/users/logout").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/activities", "/activities/**").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.PUT, "/activities", "/activities/**").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.DELETE, "/activities", "/activities/**").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.GET, "/tracking-logs/**").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.DELETE, "/tracking-logs/**").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.POST, "/tracking-logs/").permitAll()
-                )
-                .authorizeHttpRequests(req -> req.requestMatchers(HttpMethod.PATCH, "/tracking-logs/update").permitAll()
-                )
-
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> {

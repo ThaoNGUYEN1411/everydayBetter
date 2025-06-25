@@ -37,10 +37,10 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     @Transactional
     @Override
     public void updateTrackingActivity(final TrackingLogUpdate trackingLogUpdate) {
+
         TrackingLog trackingLog = repository.findByTrackedDayAndActivityId(trackingLogUpdate.trackedDate(), trackingLogUpdate.activityId()).orElseThrow(()-> new ResourceNotFoundException("Tracking log Not found"));
         trackingLog.setDone(trackingLogUpdate.done());
         repository.save(trackingLog);
-        System.out.println(trackingLog);
     }
 
     @Override

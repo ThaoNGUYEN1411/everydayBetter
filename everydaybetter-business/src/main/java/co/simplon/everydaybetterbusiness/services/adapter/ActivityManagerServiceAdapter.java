@@ -1,6 +1,5 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
-import co.simplon.everydaybetterbusiness.common.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
@@ -32,25 +31,24 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     }
 
     @Override
-    public void create(final ActivityCreate inputs) {
+    @Transactional
+    public void create(final ActivityCreate inputs, final String email) {
         Activity entity = new Activity();
         entity.setName(inputs.name());
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
-        final String email = AppUtils.getAuthenticatedUser();
+
         final User user = userService.findByEmailIgnoreCase(email);
         entity.setUser(user);
 
         final Long id = Long.valueOf(inputs.categoryId());
         final Category category = categoryService.findById(id);
         entity.setCategory(category);
-
         activityService.save(entity);
     }
 
     @Override
-    public List<ActivityModel> getAllActivitiesByUser() {
-        final String email = AppUtils.getAuthenticatedUser();
+    public List<ActivityModel> getAllActivitiesByUser(final String email) {
         final User user = userService.findByEmailIgnoreCase(email);
 
         List<Activity> activities = activityService.findByUserId(user.getId());
@@ -58,9 +56,8 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     }
 
     @Override
-    public ActivityDetailModel findById(Long id) {
+    public ActivityDetailModel findById(final Long id, final String email) {
         Activity entity = activityService.findById(id);
-        final String email = AppUtils.getAuthenticatedUser();
         if (!entity.getUser().getEmail().equals(email)){
             throw new BadCredentialsException(email);
         }
@@ -70,10 +67,9 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
 
     @Override
     @Transactional
-    public void update(Long id, ActivityUpdate inputs) {
+    public void update(final Long id, final ActivityUpdate inputs, final String email) {
         Activity entity = activityService.findById(id);
 
-        final String email = AppUtils.getAuthenticatedUser();
         final User user = userService.findByEmailIgnoreCase(email);
         if (Objects.equals(user.getId(), entity.getUser().getId())){
             entity.setName(inputs.name());
@@ -83,7 +79,6 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
             Category category = categoryService.findById(categoryId);
             entity.setCategory(category);
             activityService.save(entity);
-            System.out.println("save");
 
         }else {
             throw new BadCredentialsException(email);
