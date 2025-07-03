@@ -3,6 +3,7 @@ package co.simplon.everydaybetterbusiness.controllers;
 import co.simplon.everydaybetterbusiness.common.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogCreate;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogUpdate;
+import co.simplon.everydaybetterbusiness.models.ActivitiesProgressAnalyticsModel;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingLogModel;
 import co.simplon.everydaybetterbusiness.models.TrackingLogModel;
 import co.simplon.everydaybetterbusiness.services.TrackingLogService;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequestMapping("/tracking-logs")
 @SecurityRequirement(name = "bearerAuth")
 public class TrackingLogController {
+
     private final UserActivityTrackingLogService userActivityTrackingLogService;
     private final TrackingLogService trackingLogService;
 
@@ -39,28 +41,33 @@ public class TrackingLogController {
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Add tracking of activity by date", description = "Add tracking of activity by date")
-    public ResponseEntity<TrackingLogModel> createTrackingLog(@RequestBody @Valid final TrackingLogCreate inputs, final String email){
+    public ResponseEntity<TrackingLogModel> createTrackingLog(@RequestBody @Valid final TrackingLogCreate inputs) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userActivityTrackingLogService.saveTrackingLogForUserActivity(inputs, AppUtils.getAuthenticatedUser()));
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get all activities with tracking log", description = "Get all activities with tracking log by date")
-    public ResponseEntity<List<ActivityTrackingLogModel>> getAllActivityTrackingLog(@RequestParam(name = "start-date") final LocalDate startDate, @RequestParam(name = "end-date") final LocalDate endDate, final String email){
+    public ResponseEntity<List<ActivityTrackingLogModel>> getAllActivityTrackingLog(@RequestParam(name = "start-date") final LocalDate startDate, @RequestParam(name = "end-date") final LocalDate endDate) {
         return ResponseEntity.status(HttpStatus.OK).body(userActivityTrackingLogService.getTrackingActivityByDay(startDate, endDate, AppUtils.getAuthenticatedUser()));
     }
 
     @PatchMapping(value = "/update")
     @Operation(summary = "Update a tracking log", description = "update a tracking log according to date and activity")
-    public ResponseEntity<Void> updateTrackingActivity(@RequestBody @Valid final TrackingLogUpdate trackingLogUpdate, final String email){
+    public ResponseEntity<Void> updateTrackingActivity(@RequestBody @Valid final TrackingLogUpdate trackingLogUpdate) {
         userActivityTrackingLogService.updateTrackingActivity(trackingLogUpdate, AppUtils.getAuthenticatedUser());
-//        trackingLogService.updateTrackingActivity(trackingLogUpdate, AppUtils.getAuthenticatedUser());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/")
     @Operation(summary = "Delete a tracking log", description = "Delete a tracking log according to date and activity ")
-    public ResponseEntity<Void> deleteTrackingActivity(@RequestParam(name = "id") final Long id){
+    public ResponseEntity<Void> deleteTrackingActivity(@RequestParam(name = "id") final Long id) {
         trackingLogService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping(value = "/progress-sumary")
+    @Operation(summary = "Activities progress analytics", description = "Activities progress analytics by calculator percentage")
+    public ResponseEntity<List<ActivitiesProgressAnalyticsModel>> getActivitiesProgressAnalytics(@RequestParam(name = "start-date", required = false) final LocalDate startDate, @RequestParam(name = "end-date", required = false) final LocalDate endDate) {
+        return ResponseEntity.status(HttpStatus.OK).body(userActivityTrackingLogService.getActivitiesProgressAnalytics(startDate, endDate, AppUtils.getAuthenticatedUser()));
     }
 }

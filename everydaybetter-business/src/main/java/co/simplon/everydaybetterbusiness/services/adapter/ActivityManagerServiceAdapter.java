@@ -5,6 +5,7 @@ import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
 import co.simplon.everydaybetterbusiness.entities.Category;
 import co.simplon.everydaybetterbusiness.entities.User;
+import co.simplon.everydaybetterbusiness.mappers.ActivityMapper;
 import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
 import co.simplon.everydaybetterbusiness.models.ActivityModel;
 import co.simplon.everydaybetterbusiness.services.ActivityManagerService;
@@ -32,7 +33,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
 
     @Override
     @Transactional
-    public void create(final ActivityCreate inputs, final String email) {
+    public ActivityModel create(final ActivityCreate inputs, final String email) {
         Activity entity = new Activity();
         entity.setName(inputs.name());
         entity.setDescription(inputs.description());
@@ -44,7 +45,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
         final Long id = Long.valueOf(inputs.categoryId());
         final Category category = categoryService.findById(id);
         entity.setCategory(category);
-        activityService.save(entity);
+        return ActivityMapper.toModel(activityService.save(entity));
     }
 
     @Override
@@ -58,10 +59,11 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
     @Override
     public ActivityDetailModel findById(final Long id, final String email) {
         Activity entity = activityService.findById(id);
-        if (!entity.getUser().getEmail().equals(email)){
+        if (!entity.getUser().getEmail().equals(email)) {
             throw new BadCredentialsException(email);
         }
-        return new ActivityDetailModel(entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(),
+        return new ActivityDetailModel(
+                entity.getId(), entity.getName(), entity.getDescription(), entity.getPositive(),
                 new ActivityDetailModel.Category(entity.getCategory().getId(), entity.getCategory().getName()));
     }
 
@@ -71,7 +73,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
         Activity entity = activityService.findById(id);
 
         final User user = userService.findByEmailIgnoreCase(email);
-        if (Objects.equals(user.getId(), entity.getUser().getId())){
+        if (Objects.equals(user.getId(), entity.getUser().getId())) {
             entity.setName(inputs.name());
             entity.setDescription(inputs.description());
             entity.setPositive(inputs.positive());
@@ -80,7 +82,7 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
             entity.setCategory(category);
             activityService.save(entity);
 
-        }else {
+        } else {
             throw new BadCredentialsException(email);
         }
 

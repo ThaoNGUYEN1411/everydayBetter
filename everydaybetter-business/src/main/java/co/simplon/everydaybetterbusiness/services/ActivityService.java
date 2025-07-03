@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ActivityService {
 
-    void save(Activity entity);
+    Activity save(Activity entity);
 
     List<Activity> findByUserId(Long id);
 
