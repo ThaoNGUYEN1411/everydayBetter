@@ -14,25 +14,22 @@ CREATE TABLE t_categories(
 );
 
 CREATE TABLE t_users(
-	id INT GENERATED ALWAYS AS IDENTITY,
-	email VARCHAR(200) NOT NULL,
+	email VARCHAR(200),
 	nickname VARCHAR(200),
 	password VARCHAR(255),
-	CONSTRAINT t_users_pkey PRIMARY KEY(id),
+	CONSTRAINT t_users_pkey PRIMARY KEY(email),
 	CONSTRAINT t_users_email_ukey UNIQUE (email)
 );
 
 CREATE TABLE t_activities(
-	id INT GENERATED ALWAYS AS IDENTITY,
     activity_name VARCHAR(200) NOT NULL,
     description VARCHAR(2000),
     is_positive BOOLEAN NOT NULL,
-    user_id INT,
-    category_id INT,
-    CONSTRAINT t_activities_pkey PRIMARY KEY(id),   
-    CONSTRAINT t_activities_activity_name_user_id_ukey UNIQUE (activity_name, user_id),
-    CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
-    CONSTRAINT t_activities_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id)
+    user_email VARCHAR(200),
+    category_name VARCHAR(200),
+    CONSTRAINT t_activities_activity_name_user_id_pkey PRIMARY KEY (activity_name, user_id),
+    CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_email) REFERENCES t_users(email),
+    CONSTRAINT t_activities_categories_fkey FOREIGN KEY (category_name) REFERENCES t_categories (category_name)
 );
 
 CREATE TABLE t_tracking_logs(
