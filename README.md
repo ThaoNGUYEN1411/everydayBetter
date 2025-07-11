@@ -57,3 +57,39 @@ Replace dev2dev_user and your password with your "api" DB user credential.
 Once you've created your database and updated your application configuration, you can start your backend. If you're using Maven, you can run :
 bash
 `mvn spring-boot:run`
+pipeline {
+agent {
+label "${node}"
+    }
+    tools {
+        jdk "JDK17"
+    }
+    stages {
+        stage("Stage 1") {
+            steps {
+                echo "quality_check=${quality_check}"
+echo "build_id=${env.BUILD_ID}"
+                echo "user=${env.USER}"
+echo "build_user=${env.BUILD_USER}"
+                echo "build_user_first_name=${env.BUILD_USER_FIRST_NAME}"
+echo "build_user_last_name=${env.BUILD_USER_LAST_NAME}"
+            }
+        }
+        stage("Stage 2") {
+            steps {
+                echo "node=${node}"
+}
+}
+stage("Stage 3") {
+steps {
+sh """#!/bin/bash
+echo shell: node=${node}
+                java -version
+                echo shell: JAVA_HOME=$JAVA_HOME
+pwd
+whoami
+"""
+}
+}
+}
+}

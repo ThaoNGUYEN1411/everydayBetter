@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS t_tracking_logs;
-DROP TABLE IF EXISTS t_activities_categories;
 DROP TABLE IF EXISTS t_activities;
 DROP TABLE IF EXISTS t_users_roles;
 DROP TABLE IF EXISTS t_users;
@@ -15,7 +14,7 @@ CREATE TABLE t_categories(
 
 CREATE TABLE t_users(
 	id INT GENERATED ALWAYS AS IDENTITY,
-	email VARCHAR(200) NOT NULL UNIQUE,
+	email VARCHAR(200) NOT NULL,
 	nickname VARCHAR(200),
 	password VARCHAR(255),
 	CONSTRAINT t_users_pkey PRIMARY KEY(id),
@@ -37,7 +36,7 @@ CREATE TABLE t_activities(
 
 CREATE TABLE t_tracking_logs(
 	id INT GENERATED ALWAYS AS IDENTITY,
-	tracked_date timestamp NOT NULL,
+	tracked_date date NOT NULL,
 	done boolean NOT NULL,
 	activity_id INT NOT NULL,
 	CONSTRAINT t_tracking_logs_pkey PRIMARY KEY(id),
@@ -62,5 +61,3 @@ CREATE TABLE t_users_roles(
 	CONSTRAINT t_users_roles_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
 	CONSTRAINT t_users_roles_roles_fkey FOREIGN KEY (role_id) REFERENCES t_roles(id)
 );
-
-SELECT * FROM t_activities;
