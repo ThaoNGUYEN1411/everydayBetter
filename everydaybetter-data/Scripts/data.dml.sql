@@ -17,9 +17,9 @@ INSERT INTO t_users (email, nickname, "password") VALUES
 
 INSERT INTO t_users_roles (user_id, role_id) VALUES (
 (SELECT tu.id FROM t_users tu WHERE tu.email = 'amy@gmail.com'),
-(SELECT tr.id FROM t_roles tr WHERE tr.role_name = 'ROLE_USER')),
+(SELECT tr.id FROM t_roles tr WHERE tr.name = 'ROLE_USER')),
 ((SELECT tu.id FROM t_users tu WHERE tu.email = 'antony@gmail.com'),
-(SELECT tr.id FROM t_roles tr WHERE tr.role_name = 'ROLE_ADMIN'));
+(SELECT tr.id FROM t_roles tr WHERE tr.name = 'ROLE_ADMIN'));
 
 INSERT INTO t_activities (activity_name, description, is_positive, user_id, category_id) VALUES
 ('Lire des livres', 'Lire quelques pages d’un livre', TRUE, 
@@ -29,4 +29,3 @@ INSERT INTO t_activities (activity_name, description, is_positive, user_id, cate
 INSERT INTO t_tracking_logs (tracked_date, done, activity_id) VALUES
 ('2025-06-09', TRUE, (SELECT ta.id FROM t_activities ta INNER JOIN t_users tu ON ta.user_id = tu.id 
 WHERE ta.activity_name = 'Lire des livres' AND tu.email = 'amy@gmail.com' ));
-
