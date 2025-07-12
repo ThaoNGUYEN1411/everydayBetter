@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS t_tracking_logs;
-DROP TABLE IF EXISTS t_activities_categories;
 DROP TABLE IF EXISTS t_activities;
 DROP TABLE IF EXISTS t_users_roles;
 DROP TABLE IF EXISTS t_users;
@@ -54,13 +53,9 @@ CREATE TABLE t_roles(
 	);
 
 CREATE TABLE t_users_roles(
-	id INT GENERATED ALWAYS AS IDENTITY,
 	user_id INT NOT NULL,
 	role_id INT NOT NULL,
-	CONSTRAINT t_users_roles_pkey PRIMARY KEY(id),
-	CONSTRAINT t_users_roles_ukey UNIQUE (user_id, role_id),
+	CONSTRAINT t_users_roles_ukey PRIMARY KEY (user_id, role_id),
 	CONSTRAINT t_users_roles_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
 	CONSTRAINT t_users_roles_roles_fkey FOREIGN KEY (role_id) REFERENCES t_roles(id)
 );
-
-SELECT * FROM t_users;

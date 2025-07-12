@@ -42,13 +42,13 @@ public class UserServiceAdapter implements UserService {
         if (!defaultRoles.isEmpty()) {
             final User entity = new User(nickname, email, password, defaultRoles);
             userRepository.save(entity);
-        }else {
+        } else {
             throw new ResourceNotFoundException("Role default not found");
         }
     }
 
     @Override
-    public AuthInfo authenticate(final UserAuthenticate inputs,final HttpServletResponse response) {
+    public AuthInfo authenticate(final UserAuthenticate inputs, final HttpServletResponse response) {
         final String email = inputs.email();
         final User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new BadCredentialsException(email));
@@ -77,18 +77,18 @@ public class UserServiceAdapter implements UserService {
     }
 
     @Override
-    public void logout(final HttpServletResponse response){
+    public boolean existsByEmailIgnoreCase(final String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+
+    @Override
+    public void logout(final HttpServletResponse response) {
         Cookie cookie = new Cookie("jwt", "");
         cookie.setHttpOnly(true);
         cookie.setSecure(false); //false: testing on HTTP => when deployment it's true
         cookie.setPath("/");
         cookie.setMaxAge(0); // Expire immediately
         response.addCookie(cookie);
-    }
-
-    @Override
-    public boolean existsByEmailIgnoreCase(final String email) {
-        return userRepository.existsByEmailIgnoreCase(email);
     }
 }
 /*
