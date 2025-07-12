@@ -27,10 +27,10 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     }
 
     @Override
-    public List<ActivityTrackingLogModel.TrackingLogDto> findAllTrackingLogByActivityIdAndPeriodTime(final Long activityId, final LocalDate startDate, final LocalDate endDate ) {
+    public List<ActivityTrackingLogModel.TrackingLogDto> findAllTrackingLogByActivityIdAndPeriodTime(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
         List<ActivityTrackingLogModel.TrackingLogDto> listTrackingLog = new ArrayList<>();
         repository.findAllTrackingLogByActivityIdAndPeriodTime(activityId, startDate, endDate)
-                .forEach(trackingView -> listTrackingLog.add( new ActivityTrackingLogModel.TrackingLogDto(trackingView.getId(), trackingView.getTrackedDate(), trackingView.getDone())));
+                .forEach(trackingView -> listTrackingLog.add(new ActivityTrackingLogModel.TrackingLogDto(trackingView.getId(), trackingView.getTrackedDate(), trackingView.getDone())));
         return listTrackingLog;
     }
 
@@ -38,7 +38,7 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     @Override
     public void updateTrackingActivity(final TrackingLogUpdate trackingLogUpdate) {
 
-        TrackingLog trackingLog = repository.findByTrackedDayAndActivityId(trackingLogUpdate.trackedDate(), trackingLogUpdate.activityId()).orElseThrow(()-> new ResourceNotFoundException("Tracking log Not found"));
+        TrackingLog trackingLog = repository.findByTrackedDayAndActivityId(trackingLogUpdate.trackedDate(), trackingLogUpdate.activityId()).orElseThrow(() -> new ResourceNotFoundException("Tracking log Not found"));
         trackingLog.setDone(trackingLogUpdate.done());
         repository.save(trackingLog);
     }
@@ -51,5 +51,10 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     @Override
     public void deleteAllByActivityId(final Long activityId) {
         repository.deleteAllByActivityId(activityId);
+    }
+
+    @Override
+    public Object[] countAllByDoneByIdAndPeriodTime(final long l, final LocalDate date, final LocalDate date1) {
+        return repository.countAllByDoneByIdAndPeriodTime(l, date, date1);
     }
 }

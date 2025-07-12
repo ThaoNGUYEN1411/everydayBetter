@@ -1,4 +1,4 @@
-DELETE FROM t_tracking_record;
+DELETE FROM t_tracking_logs ;
 DELETE FROM t_activities;
 DELETE FROM t_users_roles;
 DELETE FROM t_users;
@@ -24,13 +24,8 @@ INSERT INTO t_users_roles (user_id, role_id) VALUES (
 INSERT INTO t_activities (activity_name, description, is_positive, user_id, category_id) VALUES
 ('Lire des livres', 'Lire quelques pages d’un livre', TRUE, 
 (SELECT tu.id FROM t_users tu WHERE tu.email = 'amy@gmail.com' ),
-(SELECT tc.id FROM t_categories tc WHERE tc.name = 'Vie quotidienne'));
+(SELECT tc.id FROM t_categories tc WHERE tc.category_name = 'Vie quotidienne'));
 
 INSERT INTO t_tracking_logs (tracked_date, done, activity_id) VALUES
-(2025-06-09, TRUE, (SELECT ta.id FROM t_activities ta INNER JOIN t_users tu ON ta.user_id = tu.id WHERE ta.name = 'Lire des livres' AND tu.email = 'julia@gmail.com' ))
-
-
-SELECT * FROM t_activities ta INNER JOIN t_users tu ON ta.user_id = tu.id 
-WHERE tu.email = 'julia@gmail.com';
-
-SELECT * FROM t_tracking_logs tur ;
+('2025-06-09', TRUE, (SELECT ta.id FROM t_activities ta INNER JOIN t_users tu ON ta.user_id = tu.id 
+WHERE ta.activity_name = 'Lire des livres' AND tu.email = 'amy@gmail.com' ));

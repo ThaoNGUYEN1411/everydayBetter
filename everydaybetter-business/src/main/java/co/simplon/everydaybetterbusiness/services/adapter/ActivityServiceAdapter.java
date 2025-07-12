@@ -18,8 +18,8 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public void save(final Activity entity) {
-        activityRepository.save(entity);
+    public Activity save(final Activity entity) {
+        return activityRepository.save(entity);
     }
 
     @Override
@@ -29,11 +29,11 @@ public class ActivityServiceAdapter implements ActivityService {
 
     @Override
     public Activity findByIdAndUserEmail(final Long id, final String email) {
-        return activityRepository.findByIdAndUserEmail(id, email).orElseThrow(()->new ResourceNotFoundException("Activity with ID " + id + " not found"));
+        return activityRepository.findByIdAndUserEmail(id, email).orElseThrow(() -> new ResourceNotFoundException("Activity with ID " + id + " not found"));
     }
 
     @Override
-    public void delete(final Long id){
+    public void delete(final Long id) {
         activityRepository.deleteById(id);
     }
 
@@ -43,13 +43,13 @@ public class ActivityServiceAdapter implements ActivityService {
     }
 
     @Override
-    public boolean existByActivityIdAndUserEmail(final Long activityId,final String email) {
+    public boolean existByActivityIdAndUserEmail(final Long activityId, final String email) {
         return activityRepository.existByActivityIdAndUserEmail(activityId, email);
     }
 
     @Override
     public Activity findById(Long id) {
-        return activityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Not found activity with id :" +id));
+        return activityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found activity with id :" + id));
     }
 }
 

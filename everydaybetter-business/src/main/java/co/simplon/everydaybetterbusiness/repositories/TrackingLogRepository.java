@@ -21,7 +21,7 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
                     and t.trackedDate = :trackedDate
                     """
     )
-    boolean existsByActivityIdAndTrackedDate(@Param("activityId") Long activityId,@Param("trackedDate") LocalDate trackedDate);
+    boolean existsByActivityIdAndTrackedDate(@Param("activityId") Long activityId, @Param("trackedDate") LocalDate trackedDate);
 
     @Query(value = """
             select t.id as id,
@@ -34,8 +34,8 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             order by t.trackedDate
             """)
     List<TrackingView> findAllTrackingLogByActivityIdAndPeriodTime(@Param(value = "activityId") Long activityId,
-                                                                   @Param(value = "startDate")LocalDate startDate,
-                                                                   @Param(value = "endDate") LocalDate endDate);
+            @Param(value = "startDate") LocalDate startDate,
+            @Param(value = "endDate") LocalDate endDate);
 
     @Transactional
     @Query(value = """
@@ -52,4 +52,26 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             """)
     void deleteAllByActivityId(@Param(value = "activityId") Long activityId);
 
+    @Query(value = """
+            SELECT sum(CASE WHEN done IS TRUE THEN 1 ELSE 0 END ) AS sum_done,
+            sum(CASE WHEN done IS FALSE THEN 1 ELSE 0 END ) AS sum_not_done,
+            count(*) AS total
+            FROM t_tracking_logs t WHERE t.activity_id = :activityId
+            and t.tracked_date >= :startDate
+            and t.tracked_date <= :endDate;
+            """, nativeQuery = true)
+    Object[] countAllByDoneByIdAndPeriodTime(Long activityId, LocalDate startDate, LocalDate endDate);
 }
+//@Param(value = "activityId") Long activityId,
+//            @Param(value = "startDate") LocalDate startDate,
+//            @Param(value = "endDate") LocalDate endDate
+/*
+            select
+                sum(case when t.done = true then 1 else 0 end ) as countDone,
+                sum(case when t.done = false then 1 else 0 end) as countNotDone,
+                count(t) as total
+            from trackingLog t
+            where t.activity.id = :activityId
+            and t.trackedDate >= :startDate
+            and t.trackedDate <= :endDate
+ */

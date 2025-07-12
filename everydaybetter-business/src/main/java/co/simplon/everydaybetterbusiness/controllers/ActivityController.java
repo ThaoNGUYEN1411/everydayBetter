@@ -28,6 +28,7 @@ import java.util.List;
 @RequestMapping("/activities")
 @SecurityRequirement(name = "bearerAuth")
 public class ActivityController {
+
     private final ActivityManagerService activityManagerService;
     private final UserActivityTrackingLogService userActivityTrackingLogService;
 
@@ -38,33 +39,32 @@ public class ActivityController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Create an activity", description = "Create an activity for the currently connected user")
-    public ResponseEntity<Void> createActivity(@Valid @RequestBody final ActivityCreate inputs, final String email) {
-        activityManagerService.create(inputs, AppUtils.getAuthenticatedUser());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ActivityModel> createActivity(@Valid @RequestBody final ActivityCreate inputs) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(activityManagerService.create(inputs, AppUtils.getAuthenticatedUser()));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get all activities for an user", description = "Get all activities for an user")
-    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser(final String email){
+    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser() {
         return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.getAllActivitiesByUser(AppUtils.getAuthenticatedUser()));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get an activity by id", description = "Get an activity by id")
-    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable final Long id, final String email){
+    public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.findById(id, AppUtils.getAuthenticatedUser()));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an activity by id", description = "Delete an activity by id")
-    public ResponseEntity<Void> update(@PathVariable("id") final Long id, @RequestBody @Valid final ActivityUpdate inputs, final String email) {
+    public ResponseEntity<Void> update(@PathVariable("id") final Long id, @RequestBody @Valid final ActivityUpdate inputs) {
         activityManagerService.update(id, inputs, AppUtils.getAuthenticatedUser());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an activity by id", description = "Delete an activity by id")
-    public ResponseEntity<Void> delete(@PathVariable("id") final Long id, final String email) {
+    public ResponseEntity<Void> delete(@PathVariable("id") final Long id) {
         userActivityTrackingLogService.deleteActivityById(id, AppUtils.getAuthenticatedUser());
         return ResponseEntity.status(HttpStatus.OK).build();
     }

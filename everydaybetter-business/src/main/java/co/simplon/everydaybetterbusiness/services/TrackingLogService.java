@@ -17,4 +17,6 @@ public interface TrackingLogService {
     void deleteById(Long id);
 
     void deleteAllByActivityId(Long id);
+
+    Object[] countAllByDoneByIdAndPeriodTime(long l, LocalDate date, LocalDate date1);
 }

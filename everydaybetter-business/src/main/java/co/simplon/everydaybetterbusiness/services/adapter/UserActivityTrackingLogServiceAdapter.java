@@ -5,6 +5,7 @@ import co.simplon.everydaybetterbusiness.dtos.TrackingLogUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
 import co.simplon.everydaybetterbusiness.entities.TrackingLog;
 import co.simplon.everydaybetterbusiness.mappers.TrackingLogMapper;
+import co.simplon.everydaybetterbusiness.models.ActivitiesProgressAnalyticsModel;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingLogModel;
 import co.simplon.everydaybetterbusiness.models.TrackingLogModel;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
@@ -14,10 +15,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class UserActivityTrackingLogServiceAdapter implements UserActivityTrackingLogService {
+
     private final TrackingLogService trackingLogService;
     private final ActivityService activityService;
 
@@ -27,7 +30,7 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     }
 
     @Override
-    public TrackingLogModel saveTrackingLogForUserActivity(final TrackingLogCreate inputs, final String email){
+    public TrackingLogModel saveTrackingLogForUserActivity(final TrackingLogCreate inputs, final String email) {
         final TrackingLog entity = new TrackingLog();
         final Activity activity = activityService.findByIdAndUserEmail(Long.valueOf(inputs.activityId()), email);
 
@@ -39,10 +42,8 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
 
     @Override
     public List<ActivityTrackingLogModel> getTrackingActivityByDay(final LocalDate startDate, final LocalDate endDate, final String email) {
-        return activityService.findAllActivitiesByUserEmail(email)
-                .stream()
-                .map(activity -> new ActivityTrackingLogModel(activity.getId(), activity.getName(), getTrackingByDayList(activity.getId(), startDate, endDate)))
-                .toList();
+        return activityService.findAllActivitiesByUserEmail(email).stream()
+                .map(activity -> new ActivityTrackingLogModel(activity.getId(), activity.getName(), getTrackingByDayList(activity.getId(), startDate, endDate))).toList();
     }
 
     @Override
@@ -53,15 +54,36 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     }
 
     @Override
-    public void updateTrackingActivity(final TrackingLogUpdate trackingLogUpdate,final String email) {
-        if (activityService.existByActivityIdAndUserEmail(Long.valueOf(trackingLogUpdate.activityId()), email)){
+    public void updateTrackingActivity(final TrackingLogUpdate trackingLogUpdate, final String email) {
+        if (activityService.existByActivityIdAndUserEmail(Long.valueOf(trackingLogUpdate.activityId()), email)) {
             trackingLogService.updateTrackingActivity(trackingLogUpdate);
-        }else {
+        } else {
             throw new BadCredentialsException("User can't update this activity");
         }
     }
 
-    private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final  LocalDate endDate ) {
+    @Override
+    public List<ActivitiesProgressAnalyticsModel> getActivitiesProgressAnalytics(LocalDate startDate, LocalDate endDate, final String email) {
+        if ((endDate == null) || (endDate.isAfter(LocalDate.now()))) {
+            endDate = LocalDate.now();
+        }
+        if (startDate == null) {
+            startDate = LocalDate.now().minusMonths(1);
+        }
+        System.out.println(endDate);
+        System.out.println(startDate);
+//        final List<ActivityView> activityViewList = activityService.findAllActivitiesByUserEmail(email);
+//        final List<ActivityTrackingLogModel> activityTrackingLogModels = getTrackingActivityByDay(startDate, endDate, email);
+        final Object[] progressAnalyticsView = trackingLogService.countAllByDoneByIdAndPeriodTime(1L, LocalDate.of(2025, 06, 01), LocalDate.of(2025, 06, 26));
+        Arrays.stream(progressAnalyticsView).forEach(e -> System.out.println(e.toString()));
+//        for (ActivityTrackingLogModel activityTrackingLogModel : activityTrackingLogModels) {
+//
+//        }
+//        getTrackingActivityByDay(startDate, endDate, email).stream().map(t -> );
+        return null;
+    }
+
+    private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
         return trackingLogService.findAllTrackingLogByActivityIdAndPeriodTime(activityId, startDate, endDate);
     }
 }

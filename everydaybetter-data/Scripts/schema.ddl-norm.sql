@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS t_tracking_logs;
+DROP TABLE IF EXISTS t_activities_categories;
 DROP TABLE IF EXISTS t_activities;
 DROP TABLE IF EXISTS t_users_roles;
 DROP TABLE IF EXISTS t_users;
@@ -13,25 +14,22 @@ CREATE TABLE t_categories(
 );
 
 CREATE TABLE t_users(
-	id INT GENERATED ALWAYS AS IDENTITY,
-	email VARCHAR(200) NOT NULL,
+	email VARCHAR(200),
 	nickname VARCHAR(200),
 	password VARCHAR(255),
-	CONSTRAINT t_users_pkey PRIMARY KEY(id),
+	CONSTRAINT t_users_pkey PRIMARY KEY(email),
 	CONSTRAINT t_users_email_ukey UNIQUE (email)
 );
 
 CREATE TABLE t_activities(
-	id INT GENERATED ALWAYS AS IDENTITY,
     activity_name VARCHAR(200) NOT NULL,
     description VARCHAR(2000),
     is_positive BOOLEAN NOT NULL,
-    user_id INT,
-    category_id INT,
-    CONSTRAINT t_activities_pkey PRIMARY KEY(id),   
-    CONSTRAINT t_activities_activity_name_user_id_ukey UNIQUE (activity_name, user_id),
-    CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
-    CONSTRAINT t_activities_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id)
+    user_email VARCHAR(200),
+    category_name VARCHAR(200),
+    CONSTRAINT t_activities_activity_name_user_id_pkey PRIMARY KEY (activity_name, user_id),
+    CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_email) REFERENCES t_users(email),
+    CONSTRAINT t_activities_categories_fkey FOREIGN KEY (category_name) REFERENCES t_categories (category_name)
 );
 
 CREATE TABLE t_tracking_logs(
@@ -53,9 +51,13 @@ CREATE TABLE t_roles(
 	);
 
 CREATE TABLE t_users_roles(
+	id INT GENERATED ALWAYS AS IDENTITY,
 	user_id INT NOT NULL,
 	role_id INT NOT NULL,
-	CONSTRAINT t_users_roles_ukey PRIMARY KEY (user_id, role_id),
+	CONSTRAINT t_users_roles_pkey PRIMARY KEY(id),
+	CONSTRAINT t_users_roles_ukey UNIQUE (user_id, role_id),
 	CONSTRAINT t_users_roles_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
 	CONSTRAINT t_users_roles_roles_fkey FOREIGN KEY (role_id) REFERENCES t_roles(id)
 );
+
+SELECT * FROM t_users;
