@@ -6,6 +6,9 @@ import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingLogModel;
 import co.simplon.everydaybetterbusiness.repositories.TrackingLogRepository;
 import co.simplon.everydaybetterbusiness.services.TrackingLogService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,7 @@ import java.util.List;
 
 @Service
 public class TrackingLogServiceAdapter implements TrackingLogService {
+    private static final Logger logger = LoggerFactory.getLogger(TrackingLogServiceAdapter.class);
     private final TrackingLogRepository repository;
 
     public TrackingLogServiceAdapter(TrackingLogRepository repository) {
@@ -44,8 +48,24 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     }
 
     @Override
-    public void deleteById(final Long id) {
+    public void deleteById(final Long id, final String email) {
+        if (!verifyExistTrackingLogById(id)) {
+            logger.error("Error deleting this tracking log: with id not found");
+            throw new ResourceNotFoundException("Tracking log with id " + id + " not found");
+        }
+        if (!verifyUserRightToRemoveTrackingLog(id, email)) {
+            logger.error("Error deleting this tracking log with user right");
+            throw new BadCredentialsException("User can't delete this tracking log");
+        }
         repository.deleteById(id);
+    }
+
+    private boolean verifyExistTrackingLogById(final Long id) {
+        return repository.existsById(id);
+    }
+
+    private boolean verifyUserRightToRemoveTrackingLog(final Long id, final String email) {
+        return repository.existsByIdAndUserEmail(id, email);
     }
 
     @Override

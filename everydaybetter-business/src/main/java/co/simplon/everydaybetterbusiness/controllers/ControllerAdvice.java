@@ -2,6 +2,7 @@ package co.simplon.everydaybetterbusiness.controllers;
 
 import co.simplon.everydaybetterbusiness.dtos.ApiErrorResponse;
 import co.simplon.everydaybetterbusiness.dtos.ErrorDto;
+import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -35,7 +37,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request){
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         //System.out.println(exception.getBindingResult().getAllErrors()); this line to see how to error display
         List<ApiErrorResponse.ErrorDetail> errors = exception.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> {
@@ -66,14 +68,22 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    protected ResponseEntity<ErrorDto> handleConstraintViolationException(final ConstraintViolationException exception){
-    final Map<String, String> errors = new HashMap<>();
-    exception.getConstraintViolations().forEach(error -> {
-        final String fieldName = error.getPropertyPath().toString();
-        final String errorMessage = error.getMessage();
-        errors.put(fieldName, errorMessage);
-    });
-    final var errorDetails = new ErrorDto(StringUtils.join(errors));
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
+    protected ResponseEntity<ErrorDto> handleConstraintViolationException(final ConstraintViolationException exception) {
+        final Map<String, String> errors = new HashMap<>();
+        exception.getConstraintViolations().forEach(error -> {
+            final String fieldName = error.getPropertyPath().toString();
+            final String errorMessage = error.getMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        final var errorDetails = new ErrorDto(StringUtils.join(errors));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleNotFound(ResourceNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return response;
     }
 }

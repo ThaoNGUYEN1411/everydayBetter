@@ -61,6 +61,14 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             and t.tracked_date <= :endDate;
             """, nativeQuery = true)
     Object[] countAllByDoneByIdAndPeriodTime(Long activityId, LocalDate startDate, LocalDate endDate);
+
+    @Query(value = """
+            select case when count(t)> 0 then true else false end
+            from TrackingLog t
+            where t.id = :id
+            and t.activity.user.email = :email
+            """)
+    boolean existsByIdAndUserEmail(@Param(value = "id") Long id, @Param(value = "email") String email);
 }
 //@Param(value = "activityId") Long activityId,
 //            @Param(value = "startDate") LocalDate startDate,

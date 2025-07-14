@@ -20,43 +20,43 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-  private final UserService service;
+    private final UserService service;
 
-  public UserController(UserService service) {
-    this.service = service;
-  }
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
-  @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(
-    summary = "Create a new account",
-    description = "Create a new account"
-  )
-  public ResponseEntity<Void> create(
-    @Valid @RequestBody final UserCreate inputs
-  ) {
-    service.create(inputs);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
-  }
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+            summary = "Create a new account",
+            description = "Create a new account"
+    )
+    public ResponseEntity<Void> create(
+            @Valid @RequestBody final UserCreate inputs
+    ) {
+        service.create(inputs);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
-  @PostMapping(
-    value = "/authenticate",
-    produces = MediaType.APPLICATION_JSON_VALUE
-  )
-  @Operation(summary = "User authenticate", description = "User authenticate")
-  public ResponseEntity<AuthInfo> authenticate(
-    @Valid @RequestBody final UserAuthenticate inputs,
-    HttpServletResponse response
-  ) {
-    return ResponseEntity
-      .status(HttpStatus.CREATED)
-      .body(service.authenticate(inputs, response));
-  }
+    @PostMapping(
+            value = "/authenticate",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "User authenticate", description = "User authenticate")
+    public ResponseEntity<AuthInfo> authenticate(
+            @Valid @RequestBody final UserAuthenticate inputs,
+            HttpServletResponse response
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.authenticate(inputs, response));
+    }
 
-  @PostMapping(value = "/logout")
-  @SecurityRequirement(name = "bearerAuth")
-  @Operation(summary = "User logout", description = "User logout")
-  public ResponseEntity<Void> logout(HttpServletResponse response) {
-    service.logout(response);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
-  }
+    @PostMapping(value = "/logout")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "User logout", description = "User logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        service.logout(response);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }
