@@ -11,11 +11,12 @@ import co.simplon.everydaybetterbusiness.models.TrackingLogModel;
 import co.simplon.everydaybetterbusiness.services.ActivityService;
 import co.simplon.everydaybetterbusiness.services.TrackingLogService;
 import co.simplon.everydaybetterbusiness.services.UserActivityTrackingLogService;
+import co.simplon.everydaybetterbusiness.view.ActivityView;
+import co.simplon.everydaybetterbusiness.view.TrackingSummaryView;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -64,23 +65,35 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
 
     @Override
     public List<ActivitiesProgressAnalyticsModel> getActivitiesProgressAnalytics(LocalDate startDate, LocalDate endDate, final String email) {
+        //verify endDate>=startDate
         if ((endDate == null) || (endDate.isAfter(LocalDate.now()))) {
             endDate = LocalDate.now();
         }
         if (startDate == null) {
             startDate = LocalDate.now().minusMonths(1);
         }
-        System.out.println(endDate);
-        System.out.println(startDate);
-//        final List<ActivityView> activityViewList = activityService.findAllActivitiesByUserEmail(email);
-//        final List<ActivityTrackingLogModel> activityTrackingLogModels = getTrackingActivityByDay(startDate, endDate, email);
-        final Object[] progressAnalyticsView = trackingLogService.countAllByDoneByIdAndPeriodTime(1L, LocalDate.of(2025, 06, 01), LocalDate.of(2025, 06, 26));
-        Arrays.stream(progressAnalyticsView).forEach(e -> System.out.println(e.toString()));
-//        for (ActivityTrackingLogModel activityTrackingLogModel : activityTrackingLogModels) {
-//
-//        }
-//        getTrackingActivityByDay(startDate, endDate, email).stream().map(t -> );
-        return null;
+        final LocalDate finalStartDate = startDate;
+        final LocalDate finalEndDate = endDate;
+
+        final List<ActivityView> activityViewList = activityService.findAllActivitiesByUserEmail(email);
+        return activityViewList.stream().map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), finalStartDate, finalEndDate))).toList();
+    }
+
+    private ActivitiesProgressAnalyticsModel.Progress buildProgress(Long activityId, LocalDate finalStartDate, LocalDate finalEndDate) {
+        //if total = 0 return 0 else count percent
+        if (!trackingLogService.existsTrackingLogByActivityIdAndPeriod(activityId, finalStartDate, finalEndDate)) {
+            return new ActivitiesProgressAnalyticsModel.Progress(0, 0, 0);
+        }
+
+        TrackingSummaryView trackingSummaryView = trackingLogService.findTrackingSummaryByActivityIdAndPeriod(activityId, finalStartDate, finalEndDate);
+        long sumDone = trackingSummaryView.getSumDone();
+        long sumNotDone = trackingSummaryView.getSumNotDone();
+        long sumNull = trackingSummaryView.getSumNull();
+        long total = trackingSummaryView.getTotal();
+        double percentDone = total > 0 ? (sumDone * 100) / total : 0;
+        double percentNotDone = total > 0 ? (sumNotDone * 100) / total : 0;
+        double percentNull = total > 0 ? (sumNull * 100) / total : 0;
+        return new ActivitiesProgressAnalyticsModel.Progress(percentDone, percentNotDone, percentNull);
     }
 
     private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate) {

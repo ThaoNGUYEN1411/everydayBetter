@@ -3,6 +3,7 @@ package co.simplon.everydaybetterbusiness.services;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogUpdate;
 import co.simplon.everydaybetterbusiness.entities.TrackingLog;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingLogModel;
+import co.simplon.everydaybetterbusiness.view.TrackingSummaryView;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,5 +19,7 @@ public interface TrackingLogService {
 
     void deleteAllByActivityId(Long id);
 
-    Object[] countAllByDoneByIdAndPeriodTime(long l, LocalDate date, LocalDate date1);
+    TrackingSummaryView findTrackingSummaryByActivityIdAndPeriod(Long activityId, LocalDate startDate, LocalDate endDate);
+
+    boolean existsTrackingLogByActivityIdAndPeriod(Long activityId, LocalDate startDate, LocalDate endDate);
 }

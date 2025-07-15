@@ -6,6 +6,7 @@ import co.simplon.everydaybetterbusiness.exceptions.ResourceNotFoundException;
 import co.simplon.everydaybetterbusiness.models.ActivityTrackingLogModel;
 import co.simplon.everydaybetterbusiness.repositories.TrackingLogRepository;
 import co.simplon.everydaybetterbusiness.services.TrackingLogService;
+import co.simplon.everydaybetterbusiness.view.TrackingSummaryView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -74,7 +75,12 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     }
 
     @Override
-    public Object[] countAllByDoneByIdAndPeriodTime(final long l, final LocalDate date, final LocalDate date1) {
-        return repository.countAllByDoneByIdAndPeriodTime(l, date, date1);
+    public TrackingSummaryView findTrackingSummaryByActivityIdAndPeriod(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
+        return repository.findTrackingSummaryByActivityIdAndPeriod(activityId, startDate, endDate);
+    }
+
+    @Override
+    public boolean existsTrackingLogByActivityIdAndPeriod(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
+        return repository.existsTrackingLogByActivityIdAndPeriod(activityId, startDate, endDate);
     }
 }

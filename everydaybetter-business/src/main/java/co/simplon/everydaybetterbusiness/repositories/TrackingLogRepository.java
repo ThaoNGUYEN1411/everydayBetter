@@ -1,6 +1,7 @@
 package co.simplon.everydaybetterbusiness.repositories;
 
 import co.simplon.everydaybetterbusiness.entities.TrackingLog;
+import co.simplon.everydaybetterbusiness.view.TrackingSummaryView;
 import co.simplon.everydaybetterbusiness.view.TrackingView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -53,14 +54,16 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
     void deleteAllByActivityId(@Param(value = "activityId") Long activityId);
 
     @Query(value = """
-            SELECT sum(CASE WHEN done IS TRUE THEN 1 ELSE 0 END ) AS sum_done,
-            sum(CASE WHEN done IS FALSE THEN 1 ELSE 0 END ) AS sum_not_done,
+            SELECT
+            sum(CASE WHEN done IS TRUE THEN 1 ELSE 0 END ) AS sumDone,
+            sum(CASE WHEN done IS FALSE THEN 1 ELSE 0 END ) AS sumNotDone,
+            sum(CASE WHEN done IS NULL THEN 1 ELSE 0 END ) AS sumNull,
             count(*) AS total
             FROM t_tracking_logs t WHERE t.activity_id = :activityId
             and t.tracked_date >= :startDate
             and t.tracked_date <= :endDate;
             """, nativeQuery = true)
-    Object[] countAllByDoneByIdAndPeriodTime(Long activityId, LocalDate startDate, LocalDate endDate);
+    TrackingSummaryView findTrackingSummaryByActivityIdAndPeriod(Long activityId, LocalDate startDate, LocalDate endDate);
 
     @Query(value = """
             select case when count(t)> 0 then true else false end
@@ -69,17 +72,12 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             and t.activity.user.email = :email
             """)
     boolean existsByIdAndUserEmail(@Param(value = "id") Long id, @Param(value = "email") String email);
+
+    @Query(value = """
+            select count(t)>0 from TrackingLog t
+                    Where t.activity.id = :activityId
+                    and t.trackedDate >= :startDate
+                    and t.trackedDate <= :endDate
+            """)
+    boolean existsTrackingLogByActivityIdAndPeriod(Long activityId, LocalDate startDate, LocalDate endDate);
 }
-//@Param(value = "activityId") Long activityId,
-//            @Param(value = "startDate") LocalDate startDate,
-//            @Param(value = "endDate") LocalDate endDate
-/*
-            select
-                sum(case when t.done = true then 1 else 0 end ) as countDone,
-                sum(case when t.done = false then 1 else 0 end) as countNotDone,
-                count(t) as total
-            from trackingLog t
-            where t.activity.id = :activityId
-            and t.trackedDate >= :startDate
-            and t.trackedDate <= :endDate
- */
