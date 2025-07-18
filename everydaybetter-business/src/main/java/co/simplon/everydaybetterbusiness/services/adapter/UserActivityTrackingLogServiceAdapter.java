@@ -21,6 +21,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,7 +79,8 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     public List<ActivitiesProgressAnalyticsModel> getActivitiesProgressAnalytics(final LocalDate startDate, final LocalDate endDate, final String email) {
         verifyStartAndEndDate(startDate, endDate);
         final List<ActivityView> activityViewList = activityService.findAllActivitiesByUserEmail(email);
-        return activityViewList.stream().map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), getStartDate(startDate, endDate), getEndDate(endDate)))).toList();
+        return activityViewList.stream().filter(a -> trackingLogService.existsTrackingLogByActivityIdAndPeriod(a.getId(), startDate, endDate))
+                .map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), getStartDate(startDate, endDate), getEndDate(endDate)))).toList();
     }
 
     private void verifyStartAndEndDate(final LocalDate startDate, final LocalDate endDate) {
@@ -88,20 +90,15 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     }
 
     private ActivitiesProgressAnalyticsModel.Progress buildProgress(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
-        //if total = 0 return 0 else count percent
-        if (!trackingLogService.existsTrackingLogByActivityIdAndPeriod(activityId, startDate, endDate)) {
-            return new ActivitiesProgressAnalyticsModel.Progress(0, 0, 0);
-        }
-
         TrackingSummaryView trackingSummaryView = trackingLogService.findTrackingSummaryByActivityIdAndPeriod(activityId, startDate, endDate);
         long sumDone = trackingSummaryView.getSumDone();
         long sumMissed = trackingSummaryView.getSumMissed();
-        long sumUntracked = trackingSummaryView.getSumUnTracked();
-        long total = trackingSummaryView.getTotal();
+//        long sumUntracked = trackingSummaryView.getSumUnTracked();
+        long total = ChronoUnit.DAYS.between(startDate, endDate);
 
         double percentDone = total > 0 ? (double) (sumDone * 100) / total : 0;
         double percentMissed = total > 0 ? (double) (sumMissed * 100) / total : 0;
-        double percentUntracked = total > 0 ? (double) (sumUntracked * 100) / total : 0;
+        double percentUntracked = 100 - (percentDone + percentMissed);
         return new ActivitiesProgressAnalyticsModel.Progress(percentDone, percentMissed, percentUntracked);
     }
 
