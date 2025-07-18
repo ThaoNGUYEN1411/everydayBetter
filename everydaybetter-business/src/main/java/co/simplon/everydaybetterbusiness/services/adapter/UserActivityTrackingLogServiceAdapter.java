@@ -1,5 +1,6 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
+import co.simplon.everydaybetterbusiness.controllers.TrackingLogController;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogCreate;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
@@ -13,14 +14,19 @@ import co.simplon.everydaybetterbusiness.services.TrackingLogService;
 import co.simplon.everydaybetterbusiness.services.UserActivityTrackingLogService;
 import co.simplon.everydaybetterbusiness.view.ActivityView;
 import co.simplon.everydaybetterbusiness.view.TrackingSummaryView;
+import org.hibernate.service.spi.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserActivityTrackingLogServiceAdapter implements UserActivityTrackingLogService {
+    private static final Logger log = LoggerFactory.getLogger(TrackingLogController.class);
 
     private final TrackingLogService trackingLogService;
     private final ActivityService activityService;
@@ -47,6 +53,10 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
                 .map(activity -> new ActivityTrackingLogModel(activity.getId(), activity.getName(), getTrackingByDayList(activity.getId(), startDate, endDate))).toList();
     }
 
+    private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
+        return trackingLogService.findAllTrackingLogByActivityIdAndPeriodTime(activityId, startDate, endDate);
+    }
+
     @Override
     public void deleteActivityById(final Long id, final String email) {
         //verify user token and user activity
@@ -59,44 +69,49 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
         if (activityService.existByActivityIdAndUserEmail(Long.valueOf(trackingLogUpdate.activityId()), email)) {
             trackingLogService.updateTrackingActivity(trackingLogUpdate);
         } else {
+            log.error("User can't update this activity");
             throw new BadCredentialsException("User can't update this activity");
         }
     }
 
     @Override
-    public List<ActivitiesProgressAnalyticsModel> getActivitiesProgressAnalytics(LocalDate startDate, LocalDate endDate, final String email) {
-        //verify endDate>=startDate
-        if ((endDate == null) || (endDate.isAfter(LocalDate.now()))) {
-            endDate = LocalDate.now();
-        }
-        if (startDate == null) {
-            startDate = LocalDate.now().minusMonths(1);
-        }
-        final LocalDate finalStartDate = startDate;
-        final LocalDate finalEndDate = endDate;
-
+    public List<ActivitiesProgressAnalyticsModel> getActivitiesProgressAnalytics(final LocalDate startDate, final LocalDate endDate, final String email) {
+        verifyStartAndEndDate(startDate, endDate);
         final List<ActivityView> activityViewList = activityService.findAllActivitiesByUserEmail(email);
-        return activityViewList.stream().map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), finalStartDate, finalEndDate))).toList();
+        return activityViewList.stream().map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), getStartDate(startDate, endDate), getEndDate(endDate)))).toList();
     }
 
-    private ActivitiesProgressAnalyticsModel.Progress buildProgress(Long activityId, LocalDate finalStartDate, LocalDate finalEndDate) {
+    private void verifyStartAndEndDate(final LocalDate startDate, final LocalDate endDate) {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            throw new ServiceException("invalid startDate/ endDate - startDate cannot be greater than max date");
+        }
+    }
+
+    private ActivitiesProgressAnalyticsModel.Progress buildProgress(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
         //if total = 0 return 0 else count percent
-        if (!trackingLogService.existsTrackingLogByActivityIdAndPeriod(activityId, finalStartDate, finalEndDate)) {
+        if (!trackingLogService.existsTrackingLogByActivityIdAndPeriod(activityId, startDate, endDate)) {
             return new ActivitiesProgressAnalyticsModel.Progress(0, 0, 0);
         }
 
-        TrackingSummaryView trackingSummaryView = trackingLogService.findTrackingSummaryByActivityIdAndPeriod(activityId, finalStartDate, finalEndDate);
+        TrackingSummaryView trackingSummaryView = trackingLogService.findTrackingSummaryByActivityIdAndPeriod(activityId, startDate, endDate);
         long sumDone = trackingSummaryView.getSumDone();
-        long sumNotDone = trackingSummaryView.getSumNotDone();
-        long sumNull = trackingSummaryView.getSumNull();
+        long sumMissed = trackingSummaryView.getSumMissed();
+        long sumUntracked = trackingSummaryView.getSumUnTracked();
         long total = trackingSummaryView.getTotal();
-        double percentDone = total > 0 ? (sumDone * 100) / total : 0;
-        double percentNotDone = total > 0 ? (sumNotDone * 100) / total : 0;
-        double percentNull = total > 0 ? (sumNull * 100) / total : 0;
-        return new ActivitiesProgressAnalyticsModel.Progress(percentDone, percentNotDone, percentNull);
+
+        double percentDone = total > 0 ? (double) (sumDone * 100) / total : 0;
+        double percentMissed = total > 0 ? (double) (sumMissed * 100) / total : 0;
+        double percentUntracked = total > 0 ? (double) (sumUntracked * 100) / total : 0;
+        return new ActivitiesProgressAnalyticsModel.Progress(percentDone, percentMissed, percentUntracked);
     }
 
-    private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
-        return trackingLogService.findAllTrackingLogByActivityIdAndPeriodTime(activityId, startDate, endDate);
+    private LocalDate getStartDate(final LocalDate startDate, final LocalDate endDate) {
+        return Optional.ofNullable(startDate)
+                .orElse(endDate == null ? LocalDate.now().minusMonths(1) : endDate.minusMonths(1));
     }
+
+    private LocalDate getEndDate(final LocalDate endDate) {
+        return (endDate == null || endDate.isAfter(LocalDate.now())) ? LocalDate.now() : endDate;
+    }
+
 }

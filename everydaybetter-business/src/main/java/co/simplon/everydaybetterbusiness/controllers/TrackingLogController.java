@@ -11,8 +11,6 @@ import co.simplon.everydaybetterbusiness.services.UserActivityTrackingLogService
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +31,6 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 public class TrackingLogController {
 
-    private static final Logger log = LoggerFactory.getLogger(TrackingLogController.class);
     private final UserActivityTrackingLogService userActivityTrackingLogService;
     private final TrackingLogService trackingLogService;
 

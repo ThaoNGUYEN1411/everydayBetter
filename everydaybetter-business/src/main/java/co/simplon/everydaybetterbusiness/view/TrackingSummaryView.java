@@ -3,9 +3,9 @@ package co.simplon.everydaybetterbusiness.view;
 public interface TrackingSummaryView {
     Long getSumDone();
 
-    Long getSumNotDone();
+    Long getSumMissed();
 
-    Long getSumNull();
+    Long getSumUnTracked();
 
     Long getTotal();
 }
