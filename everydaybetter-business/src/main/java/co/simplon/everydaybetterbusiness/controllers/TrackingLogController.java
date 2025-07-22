@@ -67,7 +67,8 @@ public class TrackingLogController {
 
     @GetMapping(value = "/progress-summary")
     @Operation(summary = "Activities progress analytics", description = "Activities progress analytics by calculator percentage")
-    public ResponseEntity<List<ActivitiesProgressAnalyticsModel>> getActivitiesProgressAnalytics(@RequestParam(name = "start-date", required = false) final LocalDate startDate, @RequestParam(name = "end-date", required = false) final LocalDate endDate) {
+    public ResponseEntity<List<ActivitiesProgressAnalyticsModel>> getActivitiesProgressAnalytics(@RequestParam(name = "start-date", required = false) final LocalDate startDate,
+            @RequestParam(name = "end-date", required = false) final LocalDate endDate) {
         return ResponseEntity.status(HttpStatus.OK).body(userActivityTrackingLogService.getActivitiesProgressAnalytics(startDate, endDate, AppUtils.getAuthenticatedUser()));
     }
 }

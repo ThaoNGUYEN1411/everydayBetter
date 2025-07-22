@@ -4,6 +4,4 @@ public interface TrackingSummaryView {
     Long getSumDone();
 
     Long getSumMissed();
-    
-    Long getTotal();
 }

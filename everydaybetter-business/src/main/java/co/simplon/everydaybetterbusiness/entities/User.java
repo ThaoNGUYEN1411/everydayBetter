@@ -8,11 +8,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name= "t_users")
+@Table(name = "t_users")
 public class User extends AbstractEntity {
 
     @Column(name = "nickname")
@@ -24,7 +23,7 @@ public class User extends AbstractEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-//     fetch = FetchType.LAZY: default
+    //     fetch = FetchType.LAZY: default
     @ManyToMany
     @JoinTable(name = "t_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -44,38 +43,28 @@ public class User extends AbstractEntity {
         return nickname;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + "PROTECTED" + '\'' +
-                ", roles=" + roles +
-                '}';
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     @Override
@@ -86,7 +75,22 @@ public class User extends AbstractEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), email);
+        return super.hashCode();
+    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(super.hashCode(), email);
+//    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "nickname='" + nickname + '\'' +
+               ", email='" + email + '\'' +
+               ", password='" + "PROTECTED" + '\'' +
+               ", roles=" + roles +
+               '}';
     }
 }
 // recover toString for not sprint password

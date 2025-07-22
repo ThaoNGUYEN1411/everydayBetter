@@ -56,8 +56,7 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
     @Query(value = """
             SELECT
             sum(CASE WHEN done IS TRUE THEN 1 ELSE 0 END ) AS sumDone,
-            sum(CASE WHEN done IS FALSE THEN 1 ELSE 0 END ) AS sumMissed,
-            count(*) AS total
+            sum(CASE WHEN done IS FALSE THEN 1 ELSE 0 END ) AS sumMissed
             FROM t_tracking_logs t WHERE t.activity_id = :activityId
             and t.tracked_date >= :startDate
             and t.tracked_date <= :endDate;

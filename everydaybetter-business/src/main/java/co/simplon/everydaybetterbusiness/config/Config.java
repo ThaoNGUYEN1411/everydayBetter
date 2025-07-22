@@ -48,7 +48,7 @@ public class Config {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("POST", "GET", "PUT",  "DELETE", "PATCH").allowedOrigins(origins).allowCredentials(true);
+                registry.addMapping("/**").allowedMethods("POST", "GET", "PUT", "DELETE", "PATCH").allowedOrigins(origins).allowCredentials(true);
             }
         };
     }
@@ -75,9 +75,10 @@ public class Config {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        //so Spring will manage and provide this SecurityFilterChain as a component
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req-> req
+                .authorizeHttpRequests(req -> req
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -88,11 +89,11 @@ public class Config {
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> {
-                    oauth2
-                            .bearerTokenResolver(new CookieTokenResolver()) // Utilise le resolver personnalisé
-                            .jwt(Customizer.withDefaults());
-                } // Configuration JWT par défaut
-        )              .build();
+                                          oauth2
+                                                  .bearerTokenResolver(new CookieTokenResolver()) // Utilise le resolver personnalisé
+                                                  .jwt(Customizer.withDefaults());
+                                      } // Configuration JWT par défaut
+                ).build();
     }
 }
 

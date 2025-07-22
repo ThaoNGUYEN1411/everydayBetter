@@ -93,11 +93,10 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
         TrackingSummaryView trackingSummaryView = trackingLogService.findTrackingSummaryByActivityIdAndPeriod(activityId, startDate, endDate);
         long sumDone = trackingSummaryView.getSumDone();
         long sumMissed = trackingSummaryView.getSumMissed();
-//        long sumUntracked = trackingSummaryView.getSumUnTracked();
         long total = ChronoUnit.DAYS.between(startDate, endDate);
-
-        double percentDone = total > 0 ? (double) (sumDone * 100) / total : 0;
-        double percentMissed = total > 0 ? (double) (sumMissed * 100) / total : 0;
+        //using the Math class to remove extra decimal places Math.floor(positive * 100) / 100;
+        double percentDone = total > 0 ? Math.floor((double) (sumDone * 100) * 100 / total) / 100 : 0;
+        double percentMissed = total > 0 ? Math.floor((double) (sumMissed * 100) * 100 / total) / 100 : 0;
         double percentUntracked = 100 - (percentDone + percentMissed);
         return new ActivitiesProgressAnalyticsModel.Progress(percentDone, percentMissed, percentUntracked);
     }
