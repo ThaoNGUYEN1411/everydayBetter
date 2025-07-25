@@ -1,0 +1,23 @@
+# Configs sensibles
+**/application-dev.properties
+**/application.properties
+
+# IDEs and editors
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.DS_Store
+
+# Build outputs
+target/
+logs/
+
+# Eclipse
+*.classpath
+*.project
+.settings/
+
+# Git config
+.gitattributes
