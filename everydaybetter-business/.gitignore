@@ -1,29 +1,23 @@
-### Specifical files ###
+# Configs sensibles
 **/application-dev.properties
 **/application.properties
 
+# IDEs and editors
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
 .DS_Store
 
-### Maven / Eclipse files ###
+# Build outputs
+target/
+logs/
+
+# Eclipse
 *.classpath
 *.project
 .settings/
-/target/
-/.idea/
 
-### VS Code ###
-.vscode/
-.gitattributes/
-
-### Java build files ###
-*.iml
-*.xml
-
-### Logs ###
-./logs
-
-
-### IntelliJ idea ###
-.idea
-*.iws
-*.ipr
+# Git config
+.gitattributes
