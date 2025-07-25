@@ -1,4 +1,3 @@
-design
 **/uploads
 **/.project
 **/.dbeaver
@@ -11,7 +10,9 @@ design
 **/target/
 **/bin
 
-**/.idea
 .idea/
 
 **/.DS_Store
+
+# Local folder
+design/
