@@ -17,9 +17,9 @@ INSERT INTO t_users (email, nickname, "password") VALUES
 
 INSERT INTO t_users_roles (user_id, role_id) VALUES (
 (SELECT tu.id FROM t_users tu WHERE tu.email = 'amy@gmail.com'),
-(SELECT tr.id FROM t_roles tr WHERE tr.name = 'ROLE_USER')),
+(SELECT tr.id FROM t_roles tr WHERE tr.role_name = 'ROLE_USER')),
 ((SELECT tu.id FROM t_users tu WHERE tu.email = 'antony@gmail.com'),
-(SELECT tr.id FROM t_roles tr WHERE tr.name = 'ROLE_ADMIN'));
+(SELECT tr.id FROM t_roles tr WHERE tr.role_name = 'ROLE_ADMIN'));
 
 INSERT INTO t_activities (activity_name, description, is_positive, user_id, category_id) VALUES
 ('Lire des livres', 'Lire quelques pages d’un livre', TRUE, 
