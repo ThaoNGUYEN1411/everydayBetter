@@ -48,7 +48,11 @@ public class Config {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("POST", "GET", "PUT", "DELETE", "PATCH").allowedOrigins(origins).allowCredentials(true);
+                registry.addMapping("/**")
+                        .allowedMethods("POST", "GET", "PUT", "DELETE", "PATCH")
+                        .allowedOrigins(origins).allowCredentials(true)
+                        .allowedHeaders("*")
+                        .maxAge(3600);
             }
         };
     }
