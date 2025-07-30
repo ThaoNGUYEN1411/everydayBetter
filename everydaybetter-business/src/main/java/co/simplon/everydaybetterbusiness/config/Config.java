@@ -89,6 +89,7 @@ public class Config {
                                 "/swagger-ui.html",
                                 "/swagger-resources/**"
                         ).permitAll()
+                        .requestMatchers("/projects/ping").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
