@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectController {
     @GetMapping("/ping")
     public ResponseEntity<String> apiTest() {
-        System.out.println("test");
+        System.out.println("Automatically execute Jenkins tests when there is any update in the GitHub repository.");
         return ResponseEntity.status(HttpStatus.OK).body("api test");
     }
 }
