@@ -70,6 +70,7 @@ public class TrackingLogServiceAdapter implements TrackingLogService {
     }
 
     @Override
+    @Transactional
     public void deleteAllByActivityId(final Long activityId) {
         repository.deleteAllByActivityId(activityId);
     }

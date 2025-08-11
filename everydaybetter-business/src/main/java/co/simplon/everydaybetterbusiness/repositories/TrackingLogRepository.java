@@ -4,6 +4,7 @@ import co.simplon.everydaybetterbusiness.entities.TrackingLog;
 import co.simplon.everydaybetterbusiness.view.TrackingSummaryView;
 import co.simplon.everydaybetterbusiness.view.TrackingView;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -46,7 +47,7 @@ public interface TrackingLogRepository extends JpaRepository<TrackingLog, Long> 
             """)
     Optional<TrackingLog> findByTrackedDayAndActivityId(@Param(value = "trackedDate") LocalDate trackedDate, @Param(value = "activityId") String activityId);
 
-    @Transactional
+    @Modifying
     @Query(value = """
             delete from TrackingLog t
             where t.activity.id = :activityId
