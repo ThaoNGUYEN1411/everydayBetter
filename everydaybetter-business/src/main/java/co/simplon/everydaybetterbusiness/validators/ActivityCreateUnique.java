@@ -13,11 +13,11 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueUserActivityValidator.class)
-public @interface UniqueUserActivity {
-    String message() default "Unique activity by user";
+@Constraint(validatedBy = ActivityCreateUniqueValidator.class)
+public @interface ActivityCreateUnique {
+    String message() default "Activity unique by user";
 
-    Class<?> [] groups() default {};
+    Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 }

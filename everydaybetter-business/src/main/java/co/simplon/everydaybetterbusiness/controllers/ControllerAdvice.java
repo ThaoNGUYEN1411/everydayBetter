@@ -38,7 +38,6 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        //System.out.println(exception.getBindingResult().getAllErrors()); this line to see how to error display
         List<ApiErrorResponse.ErrorDetail> errors = exception.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> {
                     ApiErrorResponse.ErrorDetail detail = new ApiErrorResponse.ErrorDetail();

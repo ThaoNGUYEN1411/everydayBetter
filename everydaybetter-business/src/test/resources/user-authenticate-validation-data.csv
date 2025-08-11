@@ -1,0 +1,9 @@
+json
+{gmail: null, password: "secret675!"}
+{gmail: "", password: "secret675!"}
+{gmail: "  ", password: "secret675!"}
+{gmail: "gmail@exemple.com", password: null}
+{gmail: "gmail@exemple.com", password: ""}
+{gmail: "gmail@exemple.com", password: "  "}
+{gmail: "gmailNotValid", password: ""}
+{gmail: "gmailNotValid", password: "secret675!"}
