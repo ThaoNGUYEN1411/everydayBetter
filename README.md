@@ -1,6 +1,6 @@
 ## Everyday better API
 
-Java(JDk 21), Spring boot (3.3.3), PostgresSql
+Java(JDk 21), Spring boot (3.4.5), PostgresSql
 
 # Description
 
