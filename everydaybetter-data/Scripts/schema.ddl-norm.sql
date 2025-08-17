@@ -26,7 +26,7 @@ CREATE TABLE t_activities(
     description VARCHAR(2000),
     is_positive BOOLEAN NOT NULL,
     user_email VARCHAR(200),
-    category_name VARCHAR(200),
+    category_name VARCHAR(200) NOT NULL,
     CONSTRAINT t_activities_activity_name_user_id_pkey PRIMARY KEY (activity_name, user_id),
     CONSTRAINT t_activities_users_fkey FOREIGN KEY (user_email) REFERENCES t_users(email),
     CONSTRAINT t_activities_categories_fkey FOREIGN KEY (category_name) REFERENCES t_categories (category_name)
