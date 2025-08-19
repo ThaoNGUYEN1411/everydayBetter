@@ -38,10 +38,8 @@ public class ActivityManagerServiceAdapter implements ActivityManagerService {
         entity.setName(inputs.name());
         entity.setDescription(inputs.description());
         entity.setPositive(inputs.positive());
-
         final User user = userService.findByEmailIgnoreCase(email);
         entity.setUser(user);
-
         final Long id = Long.valueOf(inputs.categoryId());
         final Category category = categoryService.findById(id);
         entity.setCategory(category);
