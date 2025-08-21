@@ -1,6 +1,7 @@
 # Configs sensibles
 **/application-dev.properties
 **/application.properties
+**/application-test.properties
 
 # IDEs and editors
 .idea/

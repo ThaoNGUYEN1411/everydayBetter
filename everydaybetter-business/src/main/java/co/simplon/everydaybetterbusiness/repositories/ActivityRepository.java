@@ -14,6 +14,18 @@ import java.util.Optional;
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Query(value = """
+            select a.id as id,
+                   a.name as name
+            from Activity a
+            where a.user.email = :email
+            """)
+    List<ActivityView> findAllActivitiesByUserEmail(@Param(value = "email") String email);
+
+    boolean existsByNameIgnoreCaseAndUserId(String name, Long userId);
+
+    boolean existsByNameIgnoreCaseAndUserIdAndIdNot(String name, Long userId, Long id);
+
+    @Query(value = """
             select a
             from Activity a
             where a.id = :activityId
@@ -23,21 +35,12 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     List<Activity> findByUserId(Long id);
 
-    boolean existsByNameIgnoreCaseAndUserId(String name, Long userId);
 
     @Query(value = """
-            select a.id as id,
-                   a.name as name
+            select count(a)>0
             from Activity a
-            where a.user.email = :email
+            where a.id = :activityId
+            and a.user.email= :email
             """)
-    List<ActivityView> findAllActivitiesByUserEmail(@Param(value = "email") String email);
-
-    @Query(value="""
-        select count(a)>0
-        from Activity a
-        where a.id = :activityId
-        and a.user.email= :email
-        """)
-    boolean existByActivityIdAndUserEmail(@Param(value = "activityId") Long activityId,@Param(value = "email") String email);
+    boolean existByActivityIdAndUserEmail(@Param(value = "activityId") Long activityId, @Param(value = "email") String email);
 }

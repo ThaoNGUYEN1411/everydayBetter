@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserActivityTrackingLogServiceAdapter implements UserActivityTrackingLogService {
@@ -79,14 +78,26 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     public List<ActivitiesProgressAnalyticsModel> getActivitiesProgressAnalytics(final LocalDate startDate, final LocalDate endDate, final String email) {
         verifyStartAndEndDate(startDate, endDate);
         final List<ActivityView> activityViewList = activityService.findAllActivitiesByUserEmail(email);
-        return activityViewList.stream().filter(a -> trackingLogService.existsTrackingLogByActivityIdAndPeriod(a.getId(), startDate, endDate))
-                .map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), getStartDate(startDate, endDate), getEndDate(endDate)))).toList();
+        LocalDate effectiveStartDate = getStartDate(startDate, endDate);
+        LocalDate effectiveEndDate = getEndDate(endDate);
+        return activityViewList.stream().filter(a -> trackingLogService.existsTrackingLogByActivityIdAndPeriod(a.getId(), effectiveStartDate, effectiveEndDate))
+                .map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), effectiveStartDate, effectiveEndDate))).toList();
     }
 
     private void verifyStartAndEndDate(final LocalDate startDate, final LocalDate endDate) {
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
-            throw new ServiceException("invalid startDate/ endDate - startDate cannot be greater than max date");
+            throw new ServiceException("StartDate cannot be after endDate");
         }
+    }
+
+    private LocalDate getStartDate(final LocalDate startDate, final LocalDate endDate) {
+        if (startDate != null) return startDate;
+        if (endDate != null) return endDate.minusMonths(1);
+        return LocalDate.now().minusMonths(1);
+    }
+
+    private LocalDate getEndDate(final LocalDate endDate) {
+        return (endDate == null || endDate.isAfter(LocalDate.now())) ? LocalDate.now() : endDate;
     }
 
     private ActivitiesProgressAnalyticsModel.Progress buildProgress(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
@@ -100,14 +111,4 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
         double percentUntracked = 100 - (percentDone + percentMissed);
         return new ActivitiesProgressAnalyticsModel.Progress(percentDone, percentMissed, percentUntracked);
     }
-
-    private LocalDate getStartDate(final LocalDate startDate, final LocalDate endDate) {
-        return Optional.ofNullable(startDate)
-                .orElse(endDate == null ? LocalDate.now().minusMonths(1) : endDate.minusMonths(1));
-    }
-
-    private LocalDate getEndDate(final LocalDate endDate) {
-        return (endDate == null || endDate.isAfter(LocalDate.now())) ? LocalDate.now() : endDate;
-    }
-
 }

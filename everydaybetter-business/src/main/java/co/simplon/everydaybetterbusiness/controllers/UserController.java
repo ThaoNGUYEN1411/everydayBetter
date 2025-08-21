@@ -57,6 +57,6 @@ public class UserController {
     @Operation(summary = "User logout", description = "User logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         service.logout(response);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
