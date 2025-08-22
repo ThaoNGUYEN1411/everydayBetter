@@ -1,3 +1,7 @@
+--specific schema for test
+--in local, please create schema first,then run other script the other tests scripts in this schema, not in the public
+--CREATE SCHEMA IF NOT EXISTS tests;
+
 --specific DDL for test
 DROP TABLE IF EXISTS t_tracking_logs;
 DROP TABLE IF EXISTS t_activities;
