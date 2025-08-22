@@ -28,6 +28,8 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 @EnableWebSecurity
 public class Config {
+    private static final String USER = "USER";
+
     @Value("${co.simplon.everydaybetterbusiness.origins}")
     private String origins;
 
@@ -50,12 +52,61 @@ public class Config {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("POST", "GET", "PUT", "DELETE", "PATCH")
+                registry.addMapping("/activities")
+                        .allowedMethods("POST", "GET")
                         .allowedOrigins(origins)
                         .allowCredentials(true)
-                        .allowedHeaders("*")
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600); //how long the browser can cache the CORS response before remaking an OPTIONS request 1h, default 30m
+                registry.addMapping("/activities/{id}")
+                        .allowedMethods("GET", "PUT", "DELETE")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
                         .maxAge(3600);
+                registry.addMapping("/categories")
+                        .allowedMethods("GET")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/tracking-logs/")
+                        .allowedMethods("POST", "GET", "DELETE")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/tracking-logs/update")
+                        .allowedMethods("PATCH")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/tracking-logs/progress-summary")
+                        .allowedMethods("GET")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/users/create")
+                        .allowedMethods("POST")
+                        .allowedOrigins(origins)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/users/authenticate")
+                        .allowedMethods("POST")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/users/logout")
+                        .allowedMethods("POST")
+                        .allowedOrigins(origins)
+                        .allowCredentials(true)
+                        .allowedHeaders("Content-Type", "Accept")
+                        .maxAge(3600);
+                registry.addMapping("/v3/api-docs/**").allowedOrigins(origins);
+                registry.addMapping("/swagger-ui/**").allowedOrigins(origins);
             }
         };
     }
@@ -93,17 +144,19 @@ public class Config {
                                 "/swagger-resources/**"
                         ).permitAll()
                         .requestMatchers("/projects/ping").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous())
+                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous()
+                        .requestMatchers(HttpMethod.POST, "/activities", "/tracking-logs/").hasRole(USER)
+                        .requestMatchers(HttpMethod.GET, "/activities", "/activities/{id}", "/categories", "/tracking-logs/", "/tracking-logs/progress-summary").hasRole(USER)
+                        .requestMatchers(HttpMethod.PUT, "/activities/{id}").hasRole(USER)
+                        .requestMatchers(HttpMethod.PATCH, "/tracking-logs/update").hasRole(USER)
+                        .requestMatchers(HttpMethod.DELETE, "/activities/{id}", "/tracking-logs").hasRole(USER))
                 // Always last rule:
                 .authorizeHttpRequests(reqs -> reqs.anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> {
-                                          oauth2
-                                                  .bearerTokenResolver(new CookieTokenResolver()) // Utilise le resolver personnalisé
-                                                  .jwt(Customizer.withDefaults());
-                                      } // Configuration JWT par défaut
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenResolver(new CookieTokenResolver())
+                        .jwt(Customizer.withDefaults()) // Configuration default JWT
                 ).build();
     }
 }
 
-//.oauth2ResourceServer(srv -> srv.jwt(Customizer.withDefaults())) => use par defaul dans JWT dans l’en-tête Authorization: Bearer
-//change to hasRole
+//.oauth2ResourceServer(srv -> srv.jwt(Customizer.withDefaults())) => use par default in Authorization: Bearer
