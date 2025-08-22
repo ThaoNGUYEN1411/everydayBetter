@@ -27,7 +27,6 @@ public class UserTest extends BaseIntegrationTests {
         perform(builder).andExpect(status().isCreated());
         String email = JsonPath.read(json, "$.email");
         User user = findEntityWithParams(User.class, USER_BY_EMAIL, email);
-        System.out.println(user.getNickname());
         assertThat(user.getNickname()).isEqualTo(asString(json, "$.nickname"));
         assertThat(user.getEmail()).isEqualTo(asString(json, "$.email"));
     }
