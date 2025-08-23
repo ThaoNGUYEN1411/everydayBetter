@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
 
     </parent>
-    <groupId>co.simplon.everydaybetter</groupId>
+    <groupId>co.simplon.everydaybetterbusiness</groupId>
     <artifactId>everydaybetter-business</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>everydaybetter-business</name>
