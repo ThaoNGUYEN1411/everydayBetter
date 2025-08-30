@@ -16,7 +16,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,7 +52,7 @@ class ActivityControllerTest extends MockMvcSetup {
 
         ActivityDetailModel activity = new ActivityDetailModel(1L, "faire du sport", "description", true, new ActivityDetailModel.Category(1L, "Santé"));
 
-        when(activityManagerService.findById(eq(1L), eq("test@example.com")))
+        when(activityManagerService.findById(1L, "test@example.com"))
                 .thenReturn(activity);
 
         mockMvc.perform(get(url)).andDo(print())

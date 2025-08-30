@@ -16,7 +16,6 @@ public class UniqueTrackingLogCreateValidator implements ConstraintValidator<Uni
 
     @Override
     public void initialize(UniqueTrackingLogCreate constraintAnnotation) {
-        // TODO document why this method is empty
     }
 
     @Override
