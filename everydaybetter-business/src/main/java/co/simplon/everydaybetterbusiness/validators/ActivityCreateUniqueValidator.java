@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.validators;
 
-import co.simplon.everydaybetterbusiness.common.AppUtils;
+import co.simplon.everydaybetterbusiness.common.utils.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.entities.User;
 import co.simplon.everydaybetterbusiness.repositories.ActivityRepository;

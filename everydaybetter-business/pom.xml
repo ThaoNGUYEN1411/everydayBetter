@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
 
     </parent>
-    <groupId>co.simplon.everydaybetter</groupId>
+    <groupId>co.simplon.everydaybetterbusiness</groupId>
     <artifactId>everydaybetter-business</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>everydaybetter-business</name>
@@ -87,6 +87,10 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 

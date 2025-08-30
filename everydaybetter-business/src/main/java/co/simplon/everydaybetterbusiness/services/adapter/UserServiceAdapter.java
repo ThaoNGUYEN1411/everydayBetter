@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
-import co.simplon.everydaybetterbusiness.config.JwtProvider;
+import co.simplon.everydaybetterbusiness.dtos.JwtProvider;
 import co.simplon.everydaybetterbusiness.dtos.UserAuthenticate;
 import co.simplon.everydaybetterbusiness.dtos.UserCreate;
 import co.simplon.everydaybetterbusiness.entities.Role;
@@ -26,7 +26,7 @@ public class UserServiceAdapter implements UserService {
     private final JwtProvider jwtProvider;
     private final RoleService roleService;
 
-    public UserServiceAdapter(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtProvider jwtProvider, RoleService roleService) {
+    public UserServiceAdapter(final UserRepository userRepository, final PasswordEncoder passwordEncoder, final JwtProvider jwtProvider, final RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
