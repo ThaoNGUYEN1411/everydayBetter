@@ -10,12 +10,10 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class ActivityUpdateUniqueValidator implements ConstraintValidator<ActivityUpdateUnique, ActivityUpdate> {
     private final ActivityRepository repository;
-    private final AppUtils utils;
     private final UserRepository userRepository;
 
-    public ActivityUpdateUniqueValidator(ActivityRepository repository, AppUtils utils, UserRepository userRepository) {
+    public ActivityUpdateUniqueValidator(final ActivityRepository repository, final UserRepository userRepository) {
         this.repository = repository;
-        this.utils = utils;
         this.userRepository = userRepository;
     }
 
@@ -26,7 +24,7 @@ public class ActivityUpdateUniqueValidator implements ConstraintValidator<Activi
     @Override
     public boolean isValid(final ActivityUpdate activityUpdate, ConstraintValidatorContext context) {
         final String name = activityUpdate.name();
-        final String email = utils.getAuthenticatedUser();
+        final String email = AppUtils.getAuthenticatedUser();
         final Long userId = userRepository.findByEmailIgnoreCase(email).map(User::getId)
                 .orElse(null);
         final Long id = ValidatorUtils.pathVariableAsLong("id");
