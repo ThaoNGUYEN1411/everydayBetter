@@ -23,7 +23,7 @@ public class TrackingLog extends AbstractEntity {
     @JoinColumn(name = "activity_id", nullable = false) //name column in this table
     private Activity activity;
 
-    public TrackingLog(){
+    public TrackingLog() {
         //ORM
     }
 
@@ -31,33 +31,24 @@ public class TrackingLog extends AbstractEntity {
         return trackedDate;
     }
 
-    public Boolean getDone() {
-        return done;
-    }
-
-    public Activity getActivity() {
-        return activity;
-    }
-
     public void setTrackedDate(LocalDate trackedDate) {
         this.trackedDate = trackedDate;
+    }
+
+    public Boolean getDone() {
+        return done;
     }
 
     public void setDone(Boolean done) {
         this.done = done;
     }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
+    public Activity getActivity() {
+        return activity;
     }
 
-    @Override
-    public String toString() {
-        return "TrackingLog{" +
-                "trackedDate=" + trackedDate +
-                ", done=" + done +
-                ", activity=" + activity +
-                '}';
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -66,9 +57,17 @@ public class TrackingLog extends AbstractEntity {
         return object instanceof TrackingLog other && activity.equals(other.activity) && trackedDate.equals(other.trackedDate);
     }
 
-    //todo: review
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), trackedDate, done, activity);
+    }
+
+    @Override
+    public String toString() {
+        return "TrackingLog{" +
+               "trackedDate=" + trackedDate +
+               ", done=" + done +
+               ", activity=" + activity +
+               '}';
     }
 }
