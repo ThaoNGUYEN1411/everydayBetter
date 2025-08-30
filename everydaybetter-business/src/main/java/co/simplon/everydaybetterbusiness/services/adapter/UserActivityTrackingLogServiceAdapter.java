@@ -1,6 +1,5 @@
 package co.simplon.everydaybetterbusiness.services.adapter;
 
-import co.simplon.everydaybetterbusiness.controllers.TrackingLogController;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogCreate;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogUpdate;
 import co.simplon.everydaybetterbusiness.entities.Activity;
@@ -26,7 +25,7 @@ import java.util.List;
 
 @Service
 public class UserActivityTrackingLogServiceAdapter implements UserActivityTrackingLogService {
-    private static final Logger log = LoggerFactory.getLogger(TrackingLogController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserActivityTrackingLogServiceAdapter.class);
 
     private final TrackingLogService trackingLogService;
     private final ActivityService activityService;
@@ -105,7 +104,7 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
         long sumDone = trackingSummaryView.getSumDone();
         long sumMissed = trackingSummaryView.getSumMissed();
         long total = ChronoUnit.DAYS.between(startDate, endDate);
-        //using the Math class to remove extra decimal places Math.floor(positive * 100) / 100;
+        /* using the Math class to remove extra decimal places Math.floor(positive * 100) / 100; */
         double percentDone = total > 0 ? Math.floor((double) (sumDone * 100) * 100 / total) / 100 : 0;
         double percentMissed = total > 0 ? Math.floor((double) (sumMissed * 100) * 100 / total) / 100 : 0;
         double percentUntracked = 100 - (percentDone + percentMissed);

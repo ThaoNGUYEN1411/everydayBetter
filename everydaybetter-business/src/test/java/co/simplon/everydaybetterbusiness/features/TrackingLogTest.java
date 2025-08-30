@@ -15,25 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Tracking log tests")
-public class TrackingLogTest extends BaseIntegrationTests {
-    private final static String PATH = "/csv/features/trackinglogs/";
-    private final static String TRACKING_LOG_BY_ACTIVITY_ID_AND_TRACKEDDATE = """
+class TrackingLogTest extends BaseIntegrationTests {
+    private static final String PATH = "/csv/features/trackinglogs/";
+    private static final String TRACKING_LOG_BY_ACTIVITY_ID_AND_TRACKEDDATE = """
             select t from TrackingLog t
             Where t.activity.id = :p1
             and t.trackedDate = :p2""";
-
-    private final static String ALL_TRACKING_LOGS = """
-            select t from TrackingLog t
-            where t.activity.id = :activityId
-            and t.trackedDate >= :startDate
-            and t.trackedDate <= :endDate
-            order by t.trackedDate
-            """;
-
-    private final static String ALL_TRACKING_LOGS_WITH_ACTIVITY_ID = """
-            select t from TrackingLog t
-            where t.activity.id = '%s'
-            """;
 
     @DisplayName("Should create a new tracking log")
     @ParameterizedTest
@@ -88,11 +75,8 @@ public class TrackingLogTest extends BaseIntegrationTests {
     @DisplayName("Should delete a tracking log")
     @Test
     void shouldDeleteTrackingActivity() throws Exception {
-//        final String email = "lucia@gmail.com";
         MockHttpServletRequestBuilder builder = requestBuilder("DELETE", "/activities/1", "user");
         perform(builder).andExpect(status().isOk());
-//        List<TrackingLog> trackingLogs = findEntitiesWithParams(TrackingLog.class, ALL_TRACKING_LOGS_WITH_ACTIVITY_ID, email, 1);
-//        assertThat(trackingLogs).isEmpty();
     }
 
     @DisplayName("Should Retry Activities progress analytics")

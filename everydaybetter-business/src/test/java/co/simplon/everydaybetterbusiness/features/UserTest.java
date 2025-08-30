@@ -12,10 +12,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Activities features tests")
-public class UserTest extends BaseIntegrationTests {
-    private final static String PATH = "/csv/features/users/";
+class UserTest extends BaseIntegrationTests {
+    private static final String PATH = "/csv/features/users/";
 
-    private final static String USER_BY_EMAIL = """
+    private static final String USER_BY_EMAIL = """
             select u from User u where u.email = :p1""";
 
     @DisplayName("Should create a new user")

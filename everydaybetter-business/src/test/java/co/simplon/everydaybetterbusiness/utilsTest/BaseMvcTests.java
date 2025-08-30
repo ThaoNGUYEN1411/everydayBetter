@@ -45,14 +45,10 @@ public class BaseMvcTests {
     protected final MockHttpServletRequestBuilder requestBuilder(
             String method, String path, String tokenName,
             String json) {
-        //todo var
         var builder = request(
                 HttpMethod.valueOf(method),
                 path);
         if (!"anonymous".equals(tokenName)) {
-//            builder.header(
-//                    "Authorization",
-//                    token);
             builder.cookie(new Cookie("jwt", token));
         }
         if (null != json) {

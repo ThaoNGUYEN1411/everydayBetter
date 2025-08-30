@@ -14,15 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Activities features tests")
-public class ActivitiesTest extends BaseIntegrationTests {
+class ActivitiesTest extends BaseIntegrationTests {
 
-    private final static String PATH = "/csv/features/activities/";
-    private final static String ACTIVITY_BY_NAME_USER_EMAIL = """
+    private static final String PATH = "/csv/features/activities/";
+    private static final String ACTIVITY_BY_NAME_USER_EMAIL = """
             select a from Activity a
                 where a.name = :p1
                 and a.user.email = :p2
             """;
-    private final static String ALL_ACTIVITIES = """
+    private static final String ALL_ACTIVITIES = """
             select a from Activity a where a.user.email = '%s'""";
 
     @DisplayName("Should create a new activity")
