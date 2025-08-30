@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
         scheme = "bearer",
-        bearerFormat = "JWT" // or just "Token" if not JWT
+        bearerFormat = "JWT"
 )
 public class SwaggerConfig {
 }

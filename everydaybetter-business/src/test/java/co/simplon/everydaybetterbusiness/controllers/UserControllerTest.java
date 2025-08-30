@@ -33,7 +33,7 @@ class UserControllerTest extends MockMvcSetup {
     @Test
     void shouldAuthenticate() throws Exception {
         final var url = "/users/authenticate";
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(url).with(validToken)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(asJson(new UserAuthenticate("email@exemple.com", "Secret778!"))))
                 .andDo(print())
@@ -45,7 +45,7 @@ class UserControllerTest extends MockMvcSetup {
     @CsvFileSource(resources = "/user-authenticate-validation-data.csv", numLinesToSkip = 1)
     void shouldNotAuthenticateWhenUserAuthenticateInvalid(String json) throws Exception {
         final var url = "/users/authenticate";
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(url).with(validToken)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(json))
                 .andDo(print())
@@ -55,7 +55,7 @@ class UserControllerTest extends MockMvcSetup {
     @Test
     void shouldLogout() throws Exception {
         final var url = "/users/logout";
-        mockMvc.perform(post(url))
+        mockMvc.perform(post(url).with(validToken))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

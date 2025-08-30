@@ -15,17 +15,14 @@ public class UniqueTrackingLogCreateValidator implements ConstraintValidator<Uni
     }
 
     @Override
-    public void initialize(UniqueTrackingLogCreate constraintAnnotation){
+    public void initialize(UniqueTrackingLogCreate constraintAnnotation) {
         // TODO document why this method is empty
     }
 
     @Override
-    public boolean isValid(final TrackingLogCreate dto, ConstraintValidatorContext context){
+    public boolean isValid(final TrackingLogCreate dto, ConstraintValidatorContext context) {
         final Long idActivity = Long.valueOf(dto.activityId());
         final LocalDate trackedDate = dto.trackedDate();
-        if (trackedDate == null){
-            return true;
-        }
         return !trackingLogRepository.existsByActivityIdAndTrackedDate(idActivity, trackedDate);
     }
 }

@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
-import co.simplon.everydaybetterbusiness.common.AppUtils;
+import co.simplon.everydaybetterbusiness.common.utils.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogCreate;
 import co.simplon.everydaybetterbusiness.dtos.TrackingLogUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivitiesProgressAnalyticsModel;

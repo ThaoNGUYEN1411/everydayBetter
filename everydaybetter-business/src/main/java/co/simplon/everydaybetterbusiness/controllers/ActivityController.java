@@ -1,6 +1,6 @@
 package co.simplon.everydaybetterbusiness.controllers;
 
-import co.simplon.everydaybetterbusiness.common.AppUtils;
+import co.simplon.everydaybetterbusiness.common.utils.AppUtils;
 import co.simplon.everydaybetterbusiness.dtos.ActivityCreate;
 import co.simplon.everydaybetterbusiness.dtos.ActivityUpdate;
 import co.simplon.everydaybetterbusiness.models.ActivityDetailModel;
@@ -43,16 +43,23 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(activityManagerService.create(inputs, AppUtils.getAuthenticatedUser()));
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Get all activities for an user", description = "Get all activities for an user")
-    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser() {
-        return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.getAllActivitiesByUser(AppUtils.getAuthenticatedUser()));
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an activity by id", description = "Delete an activity by id")
+    public ResponseEntity<Void> delete(@PathVariable("id") final Long id) {
+        userActivityTrackingLogService.deleteActivityById(id, AppUtils.getAuthenticatedUser());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get an activity by id", description = "Get an activity by id")
     public ResponseEntity<ActivityDetailModel> getActivityById(@PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.findById(id, AppUtils.getAuthenticatedUser()));
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Get all activities for an user", description = "Get all activities for an user")
+    public ResponseEntity<List<ActivityModel>> getAllActivitiesByUser() {
+        return ResponseEntity.status(HttpStatus.OK).body(activityManagerService.getAllActivitiesByUser(AppUtils.getAuthenticatedUser()));
     }
 
     @PutMapping("/{id}")
@@ -62,10 +69,4 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete an activity by id", description = "Delete an activity by id")
-    public ResponseEntity<Void> delete(@PathVariable("id") final Long id) {
-        userActivityTrackingLogService.deleteActivityById(id, AppUtils.getAuthenticatedUser());
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 }
