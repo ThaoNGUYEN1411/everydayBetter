@@ -42,6 +42,14 @@ public class BaseMvcTests {
         return perform(builder);
     }
 
+//    protected final ResultActions perform(String method,
+//            String path)
+//            throws Exception {
+//        var builder = requestBuilder(
+//                method, path);
+//        return perform(builder);
+//    }
+
     protected final MockHttpServletRequestBuilder requestBuilder(
             String method, String path, String tokenName,
             String json) {
@@ -64,6 +72,11 @@ public class BaseMvcTests {
             throws Exception {
         return mvc.perform(builder);
     }
+
+//    protected final ResultActions perform(String method,
+//            String path) throws Exception {
+//        return perform(method, path);
+//    }
 
     protected final MockHttpServletRequestBuilder requestBuilder(
             String method, String path, String tokenName) {

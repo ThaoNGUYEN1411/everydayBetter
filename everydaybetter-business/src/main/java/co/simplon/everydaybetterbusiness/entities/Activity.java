@@ -2,6 +2,7 @@ package co.simplon.everydaybetterbusiness.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -22,12 +23,12 @@ public class Activity extends AbstractEntity {
     @Column(name = "is_positive", nullable = false, columnDefinition = "boolean default true")
     private Boolean positive;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Activity() {
@@ -38,52 +39,40 @@ public class Activity extends AbstractEntity {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Boolean getPositive() {
-        return positive;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public Boolean getPositive() {
+        return positive;
+    }
+
     public void setPositive(Boolean positive) {
         this.positive = positive;
     }
 
-
-    public void setUser(User user) {
-        this.user = user;
+    public Category getCategory() {
+        return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return "Activity{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", positive=" + positive +
-                ", category=" + category +
-                ", user=" + user +
-                '}';
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -95,5 +84,16 @@ public class Activity extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(name, user);
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+               "name='" + name + '\'' +
+               ", description='" + description + '\'' +
+               ", positive=" + positive +
+               ", category=" + category +
+               ", user=" + user +
+               '}';
     }
 }
