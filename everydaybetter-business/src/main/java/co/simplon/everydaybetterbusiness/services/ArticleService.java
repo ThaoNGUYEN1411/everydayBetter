@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ArticleService {
     List<ArticleModel> getAllArticles();
+
+    List<ArticleModel> getAllArticlesByCategoryId(Long id);
 }

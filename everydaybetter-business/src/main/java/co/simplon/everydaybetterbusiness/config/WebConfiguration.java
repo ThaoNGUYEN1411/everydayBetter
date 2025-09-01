@@ -99,7 +99,7 @@ public class WebConfiguration {
                         .allowCredentials(true)
                         .allowedHeaders(CONTENT_TYPE, ACCEPT)
                         .maxAge(3600);
-                registry.addMapping("/articles")
+                registry.addMapping("/articles/**")
                         .allowedMethods("GET")
                         .allowedOrigins(everydayBetterConfig.getBusinessConfig().origins())
                         .allowCredentials(true)
@@ -130,7 +130,7 @@ public class WebConfiguration {
                                                        .permitAll()
                                                        .requestMatchers("/actuator/health").permitAll()
                                                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous()
-                                                       .requestMatchers(HttpMethod.GET, "/articles").anonymous()
+                                                       .requestMatchers(HttpMethod.GET, "/articles/**").anonymous()
                                                        .requestMatchers(HttpMethod.POST, PATH_ACTIVITIES, PATH_TRACKING_LOG).hasRole(USER)
                                                        .requestMatchers(
                                                                HttpMethod.GET, PATH_ACTIVITIES,

@@ -6,6 +6,7 @@ import co.simplon.everydaybetterbusiness.view.ArticleView;
 public final class ArticleMapper {
     public static ArticleModel toModel(ArticleView articleView) {
         return new ArticleModel(
+                articleView.getId(),
                 articleView.getTitle(),
                 articleView.getSubTitle(),
                 articleView.getIntroduction(),
