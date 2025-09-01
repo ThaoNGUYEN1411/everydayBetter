@@ -58,7 +58,6 @@ public class BaseMvcTests {
         return builder;
     }
 
-    //.cookie(new Cookie("jwt", token))
     protected final ResultActions perform(
             MockHttpServletRequestBuilder builder)
             throws Exception {
@@ -71,5 +70,4 @@ public class BaseMvcTests {
                 method, path, tokenName,
                 null);
     }
-
 }

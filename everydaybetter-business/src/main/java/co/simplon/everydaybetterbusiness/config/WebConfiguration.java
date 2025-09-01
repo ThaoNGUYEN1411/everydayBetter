@@ -99,6 +99,12 @@ public class WebConfiguration {
                         .allowCredentials(true)
                         .allowedHeaders(CONTENT_TYPE, ACCEPT)
                         .maxAge(3600);
+                registry.addMapping("/articles/**")
+                        .allowedMethods("GET")
+                        .allowedOrigins(everydayBetterConfig.getBusinessConfig().origins())
+                        .allowCredentials(true)
+                        .allowedHeaders(CONTENT_TYPE, ACCEPT)
+                        .maxAge(3600);
                 registry.addMapping("/v3/api-docs/**").allowedOrigins(everydayBetterConfig.getBusinessConfig().origins());
                 registry.addMapping("/swagger-ui/**").allowedOrigins(everydayBetterConfig.getBusinessConfig().origins());
             }
@@ -124,13 +130,15 @@ public class WebConfiguration {
                                                        .permitAll()
                                                        .requestMatchers("/actuator/health").permitAll()
                                                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous()
+                                                       .requestMatchers(HttpMethod.GET, "/articles/**").anonymous()
                                                        .requestMatchers(HttpMethod.POST, PATH_ACTIVITIES, PATH_TRACKING_LOG).hasRole(USER)
                                                        .requestMatchers(
                                                                HttpMethod.GET, PATH_ACTIVITIES,
                                                                PATH_ACTIVITIES_ID,
                                                                "/categories",
                                                                PATH_TRACKING_LOG,
-                                                               "/tracking-logs/progress-summary"
+                                                               "/tracking-logs/progress-summary",
+                                                               "/articles"
                                                        ).hasRole(USER)
                                                        .requestMatchers(HttpMethod.PUT, PATH_ACTIVITIES_ID).hasRole(USER)
                                                        .requestMatchers(HttpMethod.PATCH, "/tracking-logs/update").hasRole(USER)
