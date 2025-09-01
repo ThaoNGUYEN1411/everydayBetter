@@ -31,7 +31,7 @@ public class WebConfiguration {
     private static final String USER = "USER";
     private static final String PATH_ACTIVITIES = "/activities";
     private static final String PATH_ACTIVITIES_ID = "/activities/**";
-    private static final String PATH_TRACKING_LOG = "/tracking-logs";
+    private static final String PATH_TRACKING_LOG = "/tracking-logs/**";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String ACCEPT = "Accept";
     private final EverydayBetterConfig everydayBetterConfig;
@@ -110,6 +110,14 @@ public class WebConfiguration {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("default-src 'self'; " +
+                                                  "script-src 'self' https://cdn.jsdelivr.net; " +
+                                                  "object-src 'none'; " +
+                                                  "frame-ancestors 'none';"))
+                        .frameOptions(frame -> frame.deny()) //clickjacking
+                )
                 .authorizeHttpRequests(req ->
                                                req
                                                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**")
