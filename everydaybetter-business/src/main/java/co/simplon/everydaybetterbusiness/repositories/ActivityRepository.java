@@ -15,7 +15,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Query(value = """
             select a.id as id,
-                   a.name as name
+                   a.name as name,
+                   a.positive as positive
             from Activity a
             where a.user.email = :email
             """)

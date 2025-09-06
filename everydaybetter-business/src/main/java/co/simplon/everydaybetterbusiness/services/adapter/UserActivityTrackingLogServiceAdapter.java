@@ -49,7 +49,7 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
     @Override
     public List<ActivityTrackingLogModel> getTrackingActivityByDay(final LocalDate startDate, final LocalDate endDate, final String email) {
         return activityService.findAllActivitiesByUserEmail(email).stream()
-                .map(activity -> new ActivityTrackingLogModel(activity.getId(), activity.getName(), getTrackingByDayList(activity.getId(), startDate, endDate))).toList();
+                .map(activity -> new ActivityTrackingLogModel(activity.getId(), activity.getName(), activity.getPositive(), getTrackingByDayList(activity.getId(), startDate, endDate))).toList();
     }
 
     private List<ActivityTrackingLogModel.TrackingLogDto> getTrackingByDayList(final Long activityId, final LocalDate startDate, final LocalDate endDate) {
@@ -80,7 +80,7 @@ public class UserActivityTrackingLogServiceAdapter implements UserActivityTracki
         LocalDate effectiveStartDate = getStartDate(startDate, endDate);
         LocalDate effectiveEndDate = getEndDate(endDate);
         return activityViewList.stream().filter(a -> trackingLogService.existsTrackingLogByActivityIdAndPeriod(a.getId(), effectiveStartDate, effectiveEndDate))
-                .map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), buildProgress(a.getId(), effectiveStartDate, effectiveEndDate))).toList();
+                .map(a -> new ActivitiesProgressAnalyticsModel(a.getId(), a.getName(), a.getPositive(), buildProgress(a.getId(), effectiveStartDate, effectiveEndDate))).toList();
     }
 
     private void verifyStartAndEndDate(final LocalDate startDate, final LocalDate endDate) {
