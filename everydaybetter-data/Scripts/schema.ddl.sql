@@ -2,9 +2,10 @@ DROP TABLE IF EXISTS t_tracking_logs;
 DROP TABLE IF EXISTS t_activities;
 DROP TABLE IF EXISTS t_users_roles;
 DROP TABLE IF EXISTS t_users;
+DROP TABLE IF EXISTS t_articles;
+DROP TABLE IF EXISTS t_authors;
 DROP TABLE IF EXISTS t_categories;
 DROP TABLE IF EXISTS t_roles;
-DROP TABLE IF EXISTS t_articles;
 
 CREATE TABLE t_categories(
 	id INT GENERATED ALWAYS AS IDENTITY,
