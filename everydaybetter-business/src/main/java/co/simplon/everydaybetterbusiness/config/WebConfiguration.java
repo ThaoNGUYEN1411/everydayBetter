@@ -31,7 +31,7 @@ public class WebConfiguration {
     private static final String USER = "USER";
     private static final String PATH_ACTIVITIES = "/activities";
     private static final String PATH_ACTIVITIES_ID = "/activities/**";
-    private static final String PATH_TRACKING_LOG = "/tracking-logs";
+    private static final String PATH_TRACKING_LOG = "/tracking-logs/**";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String ACCEPT = "Accept";
     private final EverydayBetterConfig everydayBetterConfig;
@@ -99,6 +99,12 @@ public class WebConfiguration {
                         .allowCredentials(true)
                         .allowedHeaders(CONTENT_TYPE, ACCEPT)
                         .maxAge(3600);
+                registry.addMapping("/articles/**")
+                        .allowedMethods("GET")
+                        .allowedOrigins(everydayBetterConfig.getBusinessConfig().origins())
+                        .allowCredentials(true)
+                        .allowedHeaders(CONTENT_TYPE, ACCEPT)
+                        .maxAge(3600);
                 registry.addMapping("/v3/api-docs/**").allowedOrigins(everydayBetterConfig.getBusinessConfig().origins());
                 registry.addMapping("/swagger-ui/**").allowedOrigins(everydayBetterConfig.getBusinessConfig().origins());
             }
@@ -110,19 +116,29 @@ public class WebConfiguration {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("default-src 'self'; " +
+                                                  "script-src 'self' https://cdn.jsdelivr.net; " +
+                                                  "object-src 'none'; " +
+                                                  "frame-ancestors 'none';"))
+                        .frameOptions(frame -> frame.deny()) //clickjacking
+                )
                 .authorizeHttpRequests(req ->
                                                req
                                                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**")
                                                        .permitAll()
                                                        .requestMatchers("/actuator/health").permitAll()
                                                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous()
+                                                       .requestMatchers(HttpMethod.GET, "/articles/**").anonymous()
                                                        .requestMatchers(HttpMethod.POST, PATH_ACTIVITIES, PATH_TRACKING_LOG).hasRole(USER)
                                                        .requestMatchers(
                                                                HttpMethod.GET, PATH_ACTIVITIES,
                                                                PATH_ACTIVITIES_ID,
                                                                "/categories",
                                                                PATH_TRACKING_LOG,
-                                                               "/tracking-logs/progress-summary"
+                                                               "/tracking-logs/progress-summary",
+                                                               "/articles"
                                                        ).hasRole(USER)
                                                        .requestMatchers(HttpMethod.PUT, PATH_ACTIVITIES_ID).hasRole(USER)
                                                        .requestMatchers(HttpMethod.PATCH, "/tracking-logs/update").hasRole(USER)

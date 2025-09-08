@@ -47,7 +47,6 @@ class ActivitiesTest extends BaseIntegrationTests {
         MockHttpServletRequestBuilder builder = requestBuilder("GET", "/activities", "user");
         perform(builder).andExpect(status().isOk());
         List<Activity> activities = findEntities(Activity.class, ALL_ACTIVITIES, email);
-        assertThat(activities).isNotEmpty();
         assertThat(activities.getFirst().getName()).isEqualTo("Lire des livres");
         assertThat(activities.getFirst().getDescription()).isEqualTo("Lire quelques pages d’un livre");
         assertThat(activities.getFirst().getPositive()).isTrue();

@@ -59,3 +59,27 @@ CREATE TABLE t_users_roles(
 	CONSTRAINT t_users_roles_users_fkey FOREIGN KEY (user_id) REFERENCES t_users(id),
 	CONSTRAINT t_users_roles_roles_fkey FOREIGN KEY (role_id) REFERENCES t_roles(id)
 );
+
+CREATE TABLE t_authors(
+	id INT GENERATED ALWAYS AS IDENTITY,
+	author_name VARCHAR(200) NOT NULL,
+	CONSTRAINT t_authors_pkey PRIMARY KEY(id),
+	CONSTRAINT t_authors_unique UNIQUE (author_name)
+);
+
+CREATE TABLE t_articles(
+    id INT GENERATED ALWAYS AS IDENTITY,
+    title VARCHAR(255),
+    sub_title VARCHAR(255) NOT NULL,
+    introduction VARCHAR(500) NOT NULL,
+    content TEXT NOT NULL,
+    image VARCHAR(255),
+    thumbnail_image VARCHAR(255),
+    published_date TIMESTAMP,
+    author_id INT,
+    category_id INT,
+    CONSTRAINT t_articles_pkey PRIMARY KEY(id),
+    CONSTRAINT t_articles_unique UNIQUE (title),
+    CONSTRAINT t_articles_categories_fkey FOREIGN KEY (category_id) REFERENCES t_categories (id),
+    CONSTRAINT t_articles_authors_fkey FOREIGN KEY (author_id) REFERENCES t_authors (id)
+);
