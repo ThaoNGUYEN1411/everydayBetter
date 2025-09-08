@@ -3,6 +3,8 @@ DELETE FROM t_tracking_logs ;
 DELETE FROM t_activities;
 DELETE FROM t_users_roles;
 DELETE FROM t_users;
+DELETE FROM t_articles;
+DELETE FROM t_authors;
 DELETE FROM t_categories;
 DELETE FROM t_roles;
 
