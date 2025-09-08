@@ -33,4 +33,10 @@ public class ArticleController {
     public ResponseEntity<List<ArticleModel>> getAllArticlesByCategory(@PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.getAllArticlesByCategoryId(id));
     }
+
+    @GetMapping(value = "detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "get an article by id", description = "get an activity by id")
+    public ResponseEntity<ArticleModel> getArticleById(@PathVariable final Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.getArticleById(id));
+    }
 }

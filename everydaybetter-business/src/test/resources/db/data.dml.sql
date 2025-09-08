@@ -3,6 +3,8 @@ DELETE FROM t_tracking_logs ;
 DELETE FROM t_activities;
 DELETE FROM t_users_roles;
 DELETE FROM t_users;
+DELETE FROM t_articles;
+DELETE FROM t_authors;
 DELETE FROM t_categories;
 DELETE FROM t_roles;
 
@@ -43,21 +45,22 @@ VALUES
     '5 Exercices pour rester en forme à la maison',
     'Restez actif sans équipement',
     'Découvrez comment garder la forme même sans salle de sport grâce à des exercices simples à pratiquer chez vous.',
-    'Pour rester en forme, commencez par un échauffement léger comme marcher sur place, faire des rotations des bras et quelques étirements.\n\nEnchaînez ensuite des exercices de renforcement musculaire : squats, pompes, abdos. Faites 3 séries de 10 répétitions avec 30 secondes de repos entre chaque série.\n\nTerminez par des étirements et des exercices de respiration pour détendre vos muscles et améliorer votre bien-être général.',
-    'exercices_maison.jpg',
-    'exercices_maison_thumb.jpg',
-    '2025-09-01', --Date AND time
+	'Pour rester en forme, commencez par un échauffement léger comme marcher sur place, faire des rotations des bras et quelques étirements. Enchaînez ensuite avec des exercices de renforcement musculaire : squats, pompes, abdos. Réalisez 3 séries de 10 répétitions avec 30 secondes de repos entre chaque série. Terminez par des étirements et des exercices de respiration afin de détendre vos muscles et améliorer votre bien-être général. Pour optimiser vos résultats, veillez également à adopter une bonne hygiène de vie : buvez suffisamment d’eau, dormez entre 7 et 8 heures par nuit et privilégiez une alimentation équilibrée riche en fruits, légumes et protéines. La régularité est la clé : même de courtes séances pratiquées plusieurs fois par semaine auront un impact positif sur votre énergie et votre santé.',
+    'exercices_maison.webp',
+    'exercices_maison_thumb.webp',
+    '2025-09-01 00:00:00', --Date AND time
     1,
-    2
+    1
 ),
 (
     'Yoga quotidien pour débutants',
     'Commencez votre pratique doucement',
     'Découvrez les bienfaits du yoga pour la souplesse, la relaxation et la concentration.',
-    'Pour débuter, consacrez 15 à 20 minutes par jour à des postures simples comme la posture de l’enfant, le chien tête en bas et la posture du cobra.\n\nConcentrez-vous sur votre respiration et gardez un rythme régulier pour maximiser les bénéfices.\n\nAvec une pratique régulière, vous améliorerez votre souplesse, votre équilibre et réduirez le stress quotidien.',
-    'yoga_debutant.jpg',
-    'yoga_debutant_thumb.jpg',
-    '2025-09-01',
-    2,
-    3
+	'Pour débuter, consacrez 15 à 20 minutes par jour à des postures simples comme la posture de l’enfant, le chien tête en bas et la posture du cobra. Concentrez-vous sur votre respiration et gardez un rythme régulier pour maximiser les bénéfices. Avec une pratique régulière, vous améliorerez votre souplesse, votre équilibre et réduirez le stress quotidien.
+Pour aller plus loin, vous pouvez progressivement intégrer des postures plus avancées ou prolonger la durée de vos séances. N’oubliez pas d’écouter votre corps et de respecter vos limites afin d’éviter les blessures. La persévérance et la patience sont essentielles pour progresser en douceur et profiter pleinement des bienfaits du yoga.',
+    'yoga_debutant.webp',
+    'yoga_debutant_thumb.webp',
+    '2025-08-06 10:00:00',
+    1,
+    1
 );
