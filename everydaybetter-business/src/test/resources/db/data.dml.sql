@@ -50,7 +50,7 @@ VALUES
     'exercices_maison_thumb.webp',
     '2025-09-01 00:00:00', --Date AND time
     1,
-    1
+    2
 ),
 (
     'Yoga quotidien pour débutants',
@@ -61,6 +61,6 @@ Pour aller plus loin, vous pouvez progressivement intégrer des postures plus av
     'yoga_debutant.webp',
     'yoga_debutant_thumb.webp',
     '2025-08-06 10:00:00',
-    1,
-    1
+    2,
+    3
 );
