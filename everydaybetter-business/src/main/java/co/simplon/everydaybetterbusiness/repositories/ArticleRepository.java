@@ -43,4 +43,20 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
             order by at.publishedDate DESC
             """)
     List<ArticleView> getAllArticlesByCategoryId(@Param(value = "id") Long id);
+
+    @Query(value = """
+            select at.id as id,
+                   at.title as title,
+                   at.subTitle as subTitle,
+                   at.introduction as introduction,
+                   at.content as content,
+                   at.image as image,
+                   at.thumbnailImage as thumbnailImage,
+                   at.publishedDate as publishedDate,
+                   at.author.name as authorName,
+                   at.category.name as categoryName
+            from Article at
+            where at.id= :id
+            """)
+    ArticleView getArticleById(@Param(value = "id") Long id);
 }
