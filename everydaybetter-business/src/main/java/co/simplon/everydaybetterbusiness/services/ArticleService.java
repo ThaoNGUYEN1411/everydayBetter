@@ -8,4 +8,6 @@ public interface ArticleService {
     List<ArticleModel> getAllArticles();
 
     List<ArticleModel> getAllArticlesByCategoryId(Long id);
+
+    ArticleModel getArticleById(Long id);
 }

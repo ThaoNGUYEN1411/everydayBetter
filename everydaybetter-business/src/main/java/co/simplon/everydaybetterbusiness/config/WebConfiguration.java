@@ -129,13 +129,15 @@ public class WebConfiguration {
                                                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**")
                                                        .permitAll()
                                                        .requestMatchers("/actuator/health").permitAll()
+                                                       .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                                                       .requestMatchers(HttpMethod.GET, "/articles-images/**").permitAll()
+                                                       .requestMatchers(HttpMethod.GET, "/categories").permitAll()
                                                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/authenticate").anonymous()
                                                        .requestMatchers(HttpMethod.GET, "/articles/**").anonymous()
                                                        .requestMatchers(HttpMethod.POST, PATH_ACTIVITIES, PATH_TRACKING_LOG).hasRole(USER)
                                                        .requestMatchers(
                                                                HttpMethod.GET, PATH_ACTIVITIES,
                                                                PATH_ACTIVITIES_ID,
-                                                               "/categories",
                                                                PATH_TRACKING_LOG,
                                                                "/tracking-logs/progress-summary",
                                                                "/articles"

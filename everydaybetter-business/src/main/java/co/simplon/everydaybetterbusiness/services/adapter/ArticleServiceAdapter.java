@@ -18,11 +18,16 @@ public class ArticleServiceAdapter implements ArticleService {
 
     @Override
     public List<ArticleModel> getAllArticles() {
-        return articleRepository.getAllArticles().stream().map(view -> ArticleMapper.toModel(view)).toList();
+        return articleRepository.getAllArticles().stream().map(ArticleMapper::toModel).toList();
     }
 
     @Override
     public List<ArticleModel> getAllArticlesByCategoryId(final Long id) {
-        return articleRepository.getAllArticlesByCategoryId(id).stream().map(view -> ArticleMapper.toModel(view)).toList();
+        return articleRepository.getAllArticlesByCategoryId(id).stream().map(ArticleMapper::toModel).toList();
+    }
+
+    @Override
+    public ArticleModel getArticleById(final Long id) {
+        return ArticleMapper.toModel(articleRepository.getArticleById(id));
     }
 }
