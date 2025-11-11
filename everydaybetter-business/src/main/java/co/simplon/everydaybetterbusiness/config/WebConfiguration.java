@@ -112,6 +112,7 @@ public class WebConfiguration {
     }
 
     @Bean
+    @SuppressWarnings("ALL")
     SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
